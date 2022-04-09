@@ -50,7 +50,7 @@ with open(dgv_base_path) as f:
 if query_chr in chrDict:
     if chrDict[query_chr].overlaps(query_start, query_end):
         print("Overlap found in DGV")
-    for r in chrDict[query_chr]:
+    for r in chrDict[query_chr][query_start:query_end]:
         print(r)
 else:
     print("Invalid Chromosome name!")
