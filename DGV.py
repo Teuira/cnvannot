@@ -3,7 +3,7 @@ from intervaltree import IntervalTree
 
 # DGV DB
 
-def dgv_load():
+def dgv_gold_load():
     chr_dict = {}
     dgv_base_path = 'data/DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3'
     with open(dgv_base_path) as f:
