@@ -5,6 +5,10 @@ from intervaltree import Interval, IntervalTree
 
 print("Annotator")
 query = sys.argv[1]
+query_chr = query.split(":")[0]
+query_start_end = query.split(':')[1].split('-')
+query_start = int(query_start_end[0])
+query_end = int(query_start_end[1])
 
 # DGV DB
 
@@ -42,3 +46,13 @@ with open(dgv_base_path) as f:
                                           'var_type': var_type, 'freq': freq_percent}
         except ValueError:
             pass
+
+if query_chr in chrDict:
+    if chrDict[query_chr].overlaps(query_start, query_end):
+        print("Overlap found in DGV")
+    for r in chrDict[query_chr]:
+        print(r)
+else:
+    print("Invalid Chromosome name!")
+
+print("END")
