@@ -1,14 +1,15 @@
 # Annotateur - backend
 
 import sys
-from intervaltree import Interval, IntervalTree
+from intervaltree import IntervalTree
 
 print("Annotator")
 query = sys.argv[1]
-query_chr = query.split(":")[0]
+query_chr = query.split(':')[0]
 query_start_end = query.split(':')[1].split('-')
 query_start = int(query_start_end[0])
 query_end = int(query_start_end[1])
+query_type = query.split(':')[2]
 
 # DGV DB
 
@@ -50,8 +51,22 @@ with open(dgv_base_path) as f:
 if query_chr in chrDict:
     if chrDict[query_chr].overlaps(query_start, query_end):
         print("Overlap found in DGV")
-    for r in chrDict[query_chr][query_start:query_end]:
-        print(r)
+        with open("out.json", "a") as out_file:
+            out_file.write('{')
+        for r in chrDict[query_chr][query_start:query_end]:
+            t = r.data['var_type']
+            if t != query_type:
+                continue
+            if r.data['freq'] < 1:
+                print("< 1%: " + str(r))
+            else:
+                print(">= 1%: " + str(r))
+            with open("out.json", "a") as out_file:
+                out_file.write(str(r.data) + ',\n')
+        with open("out.json", "a") as out_file:
+            out_file.write('}')
+    else:
+        print("No overlaps found")
 else:
     print("Invalid Chromosome name!")
 
