@@ -5,8 +5,8 @@ from intervaltree import IntervalTree
 
 def refseq_load():
     chr_dict = {}
-    dgv_base_path = 'data/refGene.txt'
-    with open(dgv_base_path) as f:
+    refseq_base_path = 'data/refGene.txt'
+    with open(refseq_base_path) as f:
         for line in f:
             parts = line.split('\t')
             chrom = parts[2]
