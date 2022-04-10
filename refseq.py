@@ -20,10 +20,10 @@ def refseq_load():
                 chr_dict[chrom] = IntervalTree()
             pass
 
-    try:
-        chr_dict[chrom][start:stop] = {'chr': chrom, 'start': start, 'stop': stop,
-                                       'name1': name1, 'name2': name2}
-    except ValueError:
-        pass
+            try:
+                chr_dict[chrom][start:stop] = {'chr': chrom, 'start': start, 'stop': stop,
+                                               'name1': name1, 'name2': name2}
+            except ValueError:
+                pass
 
     return chr_dict

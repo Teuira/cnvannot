@@ -36,6 +36,14 @@ else:
     print("Invalid Chromosome name!")
 
 # RefSeq Querying
-
+if query.chr in refseq_db:
+    if refseq_db[query.chr].overlaps(query.start, query.end):
+        print("Overlap(s) found in RefSeq")
+        for r in refseq_db[query.chr][query.start:query.end]:
+            print(r.data['name1'] + ' ' + r.data['name2'])
+    else:
+        print("No overlaps found in RefSeq")
+else:
+    print("Invalid Chromosome name!")
 
 print("END")
