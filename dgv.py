@@ -10,8 +10,8 @@ def dgv_gold_load():
         for line in f:
             parts = line.split('\t')
             chrom = parts[0]
-            start = int(parts[3])
-            stop = int(parts[4])
+            start = int(parts[3])  # TODO: A Verifier
+            stop = int(parts[4])  # TODO: A VERIFIER
             dat = parts[8]
             dat_parts = dat.split(';')
             var_type = ''
