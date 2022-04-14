@@ -1,11 +1,19 @@
 from intervaltree import IntervalTree
 
+from src.serialization import *
+
 
 # DGV DB
 
 def dgv_gold_load():
     chr_dict = {}
-    dgv_base_path = 'data/DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3'
+
+    dgv_base_file = 'DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3'
+    dgv_base_path = os.path.join(Common.data_path, dgv_base_file)
+
+    if serialization_is_serialized(dgv_base_file):
+        return serialization_deserialize(dgv_base_file)
+
     with open(dgv_base_path) as f:
         for line in f:
             parts = line.split('\t')
@@ -37,5 +45,7 @@ def dgv_gold_load():
                                                'var_type': var_type, 'freq': freq_percent}
             except ValueError:
                 pass
+
+    serialization_serialize(chr_dict, dgv_base_file)
 
     return chr_dict
