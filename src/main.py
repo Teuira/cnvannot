@@ -16,7 +16,7 @@ if len(sys.argv) == 1:
 else:
     query = coordinates_from_string(sys.argv[1])
 
-# db loading
+# DBs loading
 print('Loading DBs...')
 dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
