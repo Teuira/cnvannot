@@ -1,6 +1,6 @@
 from intervaltree import IntervalTree
 
-from src.serialization import *
+from src.common.serialization import *
 
 
 # DGV DB

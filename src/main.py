@@ -6,7 +6,7 @@ from src.dbs.dgv import dgv_gold_load
 from src.dbs.refseq import refseq_load
 from src.dbs.omim import omim_morbid_genes_load
 from src.dbs.encode import encode_load
-from coordinates import coordinates_from_string
+from src.common.coordinates import coordinates_from_string
 
 print("Annotator")
 query = None
