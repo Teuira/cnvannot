@@ -1,16 +1,27 @@
 # Annotator - backend
 
 import sys
+from instructions import instructions_show
 from dgv import dgv_gold_load
 from refseq import refseq_load
+from omim import omim_morbid_genes_load
 from coordinates import coordinates_from_string
 
 print("Annotator")
-query = coordinates_from_string(sys.argv[1])
+query = None
+if len(sys.argv) == 1:
+    # Interactive mode
+    instructions_show()
+    query = coordinates_from_string(input('Please enter a query: '))
+else:
+    query = coordinates_from_string(sys.argv[1])
 
 # db loading
+print('Loading DBs...')
 dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
+omim_mg_db = omim_morbid_genes_load()
+print('...DBs loaded!')
 
 # DGV Querying
 if query.chr in dgv_db:
@@ -44,6 +55,6 @@ if query.chr in refseq_db:
     else:
         print("No overlaps found in RefSeq")
 else:
-    print("Invalid Chromosome name!")
+    print("Invalid Chromosome name (" + query.chr + ") !")
 
 print("END")
