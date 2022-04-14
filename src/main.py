@@ -5,6 +5,7 @@ from instructions import instructions_show
 from dgv import dgv_gold_load
 from refseq import refseq_load
 from omim import omim_morbid_genes_load
+from encode import encode_load
 from coordinates import coordinates_from_string
 
 print("Annotator")
