@@ -1,6 +1,6 @@
 import os
 import pickle
-from src.common.paths import Common
+from cnvannot.common.paths import Common
 
 
 def serialization_is_serialized(file_name):

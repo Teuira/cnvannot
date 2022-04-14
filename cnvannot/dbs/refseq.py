@@ -1,5 +1,5 @@
 from intervaltree import IntervalTree
-from src.common.serialization import *
+from cnvannot.common.serialization import *
 
 
 # RefSeq DB

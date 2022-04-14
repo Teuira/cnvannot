@@ -1,6 +1,6 @@
 import os.path
 
-from src.common.serialization import *
+from cnvannot.common.serialization import *
 
 
 # OMIM DB

@@ -2,11 +2,11 @@
 
 import sys
 from instructions import instructions_show
-from src.dbs.dgv import dgv_gold_load
-from src.dbs.refseq import refseq_load
-from src.dbs.omim import omim_morbid_genes_load
-from src.dbs.encode import encode_load
-from src.common.coordinates import coordinates_from_string
+from cnvannot.dbs.dgv import dgv_gold_load
+from cnvannot.dbs.refseq import refseq_load
+from cnvannot.dbs.omim import omim_morbid_genes_load
+from cnvannot.dbs.encode import encode_load
+from cnvannot.common.coordinates import coordinates_from_string
 
 print("Annotator")
 query = None

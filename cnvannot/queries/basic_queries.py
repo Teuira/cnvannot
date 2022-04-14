@@ -1,6 +1,6 @@
 from intervaltree import IntervalTree
 
-from src.common.coordinates import GenomicCoordinates
+from cnvannot.common.coordinates import GenomicCoordinates
 
 
 def query_overlaps(db, query: GenomicCoordinates) -> bool:
