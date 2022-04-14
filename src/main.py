@@ -2,10 +2,10 @@
 
 import sys
 from instructions import instructions_show
-from dgv import dgv_gold_load
-from refseq import refseq_load
-from omim import omim_morbid_genes_load
-from encode import encode_load
+from src.dbs.dgv import dgv_gold_load
+from src.dbs.refseq import refseq_load
+from src.dbs.omim import omim_morbid_genes_load
+from src.dbs.encode import encode_load
 from coordinates import coordinates_from_string
 
 print("Annotator")
@@ -22,6 +22,7 @@ print('Loading DBs...')
 dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
 omim_mg_db = omim_morbid_genes_load()
+encode_db = encode_load()
 print('...DBs loaded!')
 
 # DGV Querying
