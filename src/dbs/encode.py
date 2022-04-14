@@ -1,5 +1,5 @@
 from intervaltree import IntervalTree
-from serialization import *
+from src.serialization import *
 
 
 # Encode DB
