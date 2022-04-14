@@ -27,5 +27,5 @@ def omim_morbid_genes_load():
     return gene_dict
 
 
-def omim_query(refseq_db):
+def omim_query(refseq_db, query):
     pass

@@ -27,15 +27,15 @@ Placez les dans un dossier "data" à la racine de votre projet
 
 Pour lancer le projet il faut lui indiquer les paramètres
 ```
-chromosome:start-stop:CNV
+reference:chromosome:start-stop:CNV
 ```
 Par exemple une recherche sur le chromosome 1 entre 1 et 100000 avec une délétion
 ```
-chr1:1-100000:LOSS
+hg19:chr1:1-100000:LOSS
 ```
 Par exemple une recherche sur le chromosome 1 entre 1 et 100000 avec un gain
 ```
-chr1:1-100000:GAIN
+hg19:chr1:1-100000:GAIN
 ```
 
 Exemple de retour sous format JSON de la requête "chr1:1-100000:LOSS"
