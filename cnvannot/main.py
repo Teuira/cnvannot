@@ -2,10 +2,11 @@
 
 import sys
 from instructions import instructions_show
-from cnvannot.dbs.dgv import dgv_gold_load
-from cnvannot.dbs.refseq import refseq_load
-from cnvannot.dbs.omim import omim_morbid_genes_load
-from cnvannot.dbs.encode import encode_load
+from cnvannot.annotations.dgv import dgv_gold_load
+from cnvannot.annotations.refseq import refseq_load
+from cnvannot.annotations.omim import omim_morbid_genes_load
+from cnvannot.annotations.encode import encode_load
+from cnvannot.annotations.xcnv import xcnv_predict
 from cnvannot.common.coordinates import coordinates_from_string
 
 print("Annotator")
@@ -23,6 +24,7 @@ dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
 omim_mg_db = omim_morbid_genes_load()
 encode_db = encode_load()
+xcnv_load()
 print('...DBs loaded!')
 
 # DGV Querying
