@@ -11,6 +11,7 @@ from cnvannot.annotations.encode import encode_load
 from cnvannot.annotations.xcnv import xcnv_is_avail
 from cnvannot.common.coordinates import coordinates_from_string
 from cnvannot.gui.local.simple_local import LocalGui
+from cnvannot.gui.web.simple_web import run_server
 
 print("CNVAnnot")
 
@@ -28,7 +29,7 @@ else:
         gui.mainloop()
     elif sys.argv[1] == "web-gui":
         # Web GUI
-        pass
+        run_server()
     else:
         # CMD-Line mode
         query = coordinates_from_string(sys.argv[1])
