@@ -51,7 +51,7 @@ if query.chr in dgv_db:
     if dgv_db[query.chr].overlaps(query.start, query.end):
         print("Overlap(s) found in DGV")
         with open("out.json", "a") as out_file:
-            out_file.write('{')
+            out_file.write('[')
         for r in dgv_db[query.chr][query.start:query.end]:
             t = r.data['var_type']
             if t != query.type:
@@ -63,7 +63,7 @@ if query.chr in dgv_db:
             with open("out.json", "a") as out_file:
                 out_file.write(str(r.data) + ',\n')
         with open("out.json", "a") as out_file:
-            out_file.write('}')
+            out_file.write(']')
     else:
         print("No overlaps found")
 else:
