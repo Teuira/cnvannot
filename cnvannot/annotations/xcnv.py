@@ -1,5 +1,6 @@
 import docker
 from docker.errors import DockerException
+from time import sleep
 
 # XCNV DB (ONLY hg19)
 from cnvannot.common.coordinates import GenomicCoordinates
@@ -20,10 +21,29 @@ def xcnv_is_avail() -> bool:
     return False
 
 
-def xcnv_predict(query: GenomicCoordinates) -> str:
+def xcnv_predict(query: GenomicCoordinates) -> dict:
     if query.ref != "hg19":
         raise Exception("XCNV works only on hg19")
 
-    res = ""  # TODO
+    client = docker.from_env()
+    cont = client.containers.run('xcnvcl', query.chr + ':' + str(query.start) + '-' + str(query.end) + ':' + query.type,
+                                 detach=True)
 
-    return base_coordinates_annotation(query)["xcnv": {"prediction": res}]
+    prediction = ''
+
+    for i in range(20):
+        curr_out = cont.logs()
+        if len(curr_out) > 0:
+            possible_prediction = curr_out.split()[-1]
+            try:
+                float(possible_prediction)
+            except ValueError:
+                continue
+            prediction = float(possible_prediction)
+            break
+        sleep(1)
+
+    ret_dict = base_coordinates_annotation(query)
+    ret_dict["xcnv"] = {"prediction": prediction}
+
+    return ret_dict
