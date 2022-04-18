@@ -3,6 +3,7 @@ import webbrowser
 from cnvannot.common.coordinates import coordinates_from_string
 from tkinter import messagebox
 from cnvannot.annotations.ucsc import ucsc_get_annotation_link
+from cnvannot.annotations.xcnv import xcnv_predict, xcnv_interpretation_from_score
 
 
 class LocalGui(tk.Frame):
@@ -37,10 +38,19 @@ class LocalGui(tk.Frame):
             tk.messagebox.showinfo('Sorry', 'Malformed query.')
             return
 
+        self.res_lbl['text'] = 'Please wait...'
+
+        # UCSC
         ucsc_url = str(ucsc_get_annotation_link(query)['ucsc']['link'])
         self.ucsc_link['text'] = 'UCSC'
         self.ucsc_link.bind("<Button-1>", lambda e: self.url_callback(ucsc_url))
-        self.res_lbl['text'] = ""  # TODO
+
+        # X-CNV
+        xcnv_res = xcnv_predict(query)['xcnv']['prediction']
+
+        self.res_lbl['text'] = 'X-CNV: ' + "{:1.2f}".format(xcnv_res) + ' (' + xcnv_interpretation_from_score(xcnv_res) + ')'
+
+        # TODO: Add other annotations.
 
     @staticmethod
     def url_callback(url):
