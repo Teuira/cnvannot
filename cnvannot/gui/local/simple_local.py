@@ -14,9 +14,9 @@ class LocalGui(tk.Frame):
         self.coord = tk.StringVar()
         self.coord.set('hg19:chr2:1000000-2000000:gain')
 
-        self.coord_lbl = tk.Label(text='Genomic Coordinates:\n<ref>:<chr>:<start>-<stop>:<gain|loss>')
+        self.coord_lbl = tk.Label(text='Genomic Coordinates:\n\n<ref>:<chr>:<start>-<stop>:<gain|loss>\n')
         self.coord_lbl.pack()
-        self.coord_txt = tk.Entry(textvariable=self.coord)
+        self.coord_txt = tk.Entry(textvariable=self.coord, width=40)
         self.coord_txt.pack()
 
         self.ucsc_link = tk.Label(fg="blue", cursor="hand2")
@@ -25,10 +25,10 @@ class LocalGui(tk.Frame):
         self.res_lbl = tk.Label(text="Press Go to analyze.")
         self.res_lbl.pack()
 
-        self.go_btn = tk.Button(text="GO", command=self.analyze)
+        self.go_btn = tk.Button(text="GO", width=20, command=self.analyze)
         self.go_btn.pack()
 
-        self.reset_btn = tk.Button(text="Reset", command=self.reset)
+        self.reset_btn = tk.Button(text="Reset", width=20, command=self.reset)
         self.reset_btn.pack()
 
     def analyze(self):
