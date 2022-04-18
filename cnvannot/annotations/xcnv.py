@@ -3,12 +3,10 @@ from docker.errors import DockerException
 
 # XCNV DB (ONLY hg19)
 from cnvannot.common.coordinates import GenomicCoordinates
+from cnvannot.annotations.base import base_coordinates_annotation
 
 
 def xcnv_is_avail() -> bool:
-    client = None
-    images = None
-
     try:
         client = docker.from_env()
         images = client.images
@@ -26,7 +24,6 @@ def xcnv_predict(query: GenomicCoordinates) -> str:
     if query.ref != "hg19":
         raise Exception("XCNV works only on hg19")
 
-    res = ""
-    pass
+    res = ""  # TODO
 
-    return res
+    return base_coordinates_annotation(query)["xcnv": {"prediction": res}]
