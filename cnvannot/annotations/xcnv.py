@@ -47,3 +47,14 @@ def xcnv_predict(query: GenomicCoordinates) -> dict:
     ret_dict["xcnv"] = {"prediction": prediction}
 
     return ret_dict
+
+
+def xcnv_interpretation_from_score(score: float) -> str:
+    if score < 0.25:
+        return 'benign'
+    elif score < 0.5:
+        return 'likely benign'
+    elif score < 0.75:
+        return 'likely pathogenic'
+    else:
+        return 'pathogenic'
