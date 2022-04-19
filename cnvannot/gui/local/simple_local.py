@@ -10,7 +10,9 @@ from cnvannot.annotations.ucsc import ucsc_get_annotation_link
 from cnvannot.annotations.xcnv import xcnv_is_avail
 from cnvannot.annotations.xcnv import xcnv_predict, xcnv_interpretation_from_score
 from cnvannot.common.coordinates import coordinates_from_string
-from cnvannot.queries.basic_queries import query_overlaps
+from cnvannot.queries.basic_queries import *
+from cnvannot.queries.specific_queries import *
+from cnvannot.queries.interpretation import *
 
 
 class LocalGui(tk.Frame):
@@ -69,56 +71,30 @@ class LocalGui(tk.Frame):
         self.ucsc_link['text'] = '\nUCSC Web Browser\n'
         self.ucsc_link.bind("<Button-1>", lambda e: self.url_callback(ucsc_url))
 
-        # X-CNV
-        xcnv_res = xcnv_predict(query)['xcnv']['prediction']
-
-        # OMIM Morbid genes
-
         self.res_lbl['text'] = ''
-
+        # Basic infos
         self.res_lbl['text'] += 'CNV length: ' + f'{(query.end - query.start):,}' + ' bases\n'
         self.res_lbl['text'] += 'Type: ' + str.upper(query.type) + '\n'
+        # X-CNV
+        xcnv_res = xcnv_predict(query)['xcnv']['prediction']
         self.res_lbl['text'] += 'X-CNV: ' + f'{xcnv_res:1.2f}' + ' (' + xcnv_interpretation_from_score(xcnv_res) + ')\n'
+        # ENCODE
         self.res_lbl['text'] += 'Intersects excluded regions: ' + str(query_overlaps(self.encode_db, query)) + '\n '
-        self.res_lbl['text'] += 'Number of genes intersected: ' + '\n'
-        self.res_lbl['text'] += 'Overlaps OMIM morbid genes: ' + '\n'
+        # RefSeq
+        gene_overlap_count = query_overlap_count(self.refseq_db, query)
+        self.res_lbl['text'] += 'Number of genes intersected: ' + str(gene_overlap_count) + '\n'
+        # OMIM Morbid genes
+        morbid_gene_overlap_count = query_overlap_count(self.omim_mg_db, query)
+        self.res_lbl['text'] += 'Overlaps OMIM morbid genes: ' + str(morbid_gene_overlap_count) + '\n'
+        dgv_gold_cnv_overlap_count = dgv_gold_overlap_count_1_percent(self.dgv_db, query)
+        # DGV Gold >= 1%
+        self.res_lbl['text'] += 'Overlaps DGV Gold CNVs: ' + str(dgv_gold_cnv_overlap_count) + '\n'
 
-        self.res_lbl['text'] += '\nInterpretation suggestion: ' + '\n'
-
-        # TODO: Add other annotations.
-        # # DGV Querying
-        # if query.chr in dgv_db:
-        #     if dgv_db[query.chr].overlaps(query.start, query.end):
-        #         print("Overlap(s) found in DGV")
-        #         with open("out.json", "a") as out_file:
-        #             out_file.write('[')
-        #         for r in dgv_db[query.chr][query.start:query.end]:
-        #             t = r.data['var_type']
-        #             if t != query.type:
-        #                 continue
-        #             if r.data['freq'] < 1:
-        #                 print("< 1%: " + str(r))
-        #             else:
-        #                 print(">= 1%: " + str(r))
-        #             with open("out.json", "a") as out_file:
-        #                 out_file.write(str(r.data) + ',\n')
-        #         with open("out.json", "a") as out_file:
-        #             out_file.write(']')
-        #     else:
-        #         print("No overlaps found")
-        # else:
-        #     print("Invalid Chromosome name!")
-        #
-        # # RefSeq Querying
-        # if query.chr in refseq_db:
-        #     if refseq_db[query.chr].overlaps(query.start, query.end):
-        #         print("Overlap(s) found in RefSeq")
-        #         for r in refseq_db[query.chr][query.start:query.end]:
-        #             print(r.data['name1'] + ' ' + r.data['name2'])
-        #     else:
-        #         print("No overlaps found in RefSeq")
-        # else:
-        #     print("Invalid Chromosome name (" + query.chr + ") !")
+        # Interpretation
+        self.res_lbl['text'] += '\nInterpretation suggestion: ' + interpretation_get(xcnv_res,
+                                                                                     gene_overlap_count,
+                                                                                     morbid_gene_overlap_count,
+                                                                                     query.type) + '\n'
 
     @staticmethod
     def url_callback(url):
