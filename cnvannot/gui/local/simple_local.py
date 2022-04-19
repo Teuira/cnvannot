@@ -101,6 +101,7 @@ class LocalGui(tk.Frame):
         webbrowser.open_new(url)
 
     def reset(self):
+        self.ucsc_link['text'] = ''
         self.res_lbl['text'] = 'Press GO to analyze.\n'
         self.coord.set('hg19:')
         pass
