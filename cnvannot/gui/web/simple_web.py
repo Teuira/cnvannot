@@ -43,15 +43,24 @@ def search(str_query: str):
     xcnv_res_interpretation = None
     if xcnv_avail:
         xcnv_res = xcnv_predict(query)['xcnv']['prediction']
-        xcnv_res_interpretation = xcnv_interpretation_from_score(xcnv_res) + ')\n'
+        xcnv_res_interpretation = xcnv_interpretation_from_score(xcnv_res) + '\n'
 
-    synth_interpretation = '\nInterpretation suggestion(s): ' + interpretation_get(xcnv_res,
-                                                                                   exclude_overlaps,
-                                                                                   gene_overlap_count,
-                                                                                   morbid_gene_overlap_count,
-                                                                                   query.type) + '\n'
+    synth_interpretation = 'Interpretation suggestion(s): ' + interpretation_get(xcnv_res,
+                                                                                 exclude_overlaps,
+                                                                                 gene_overlap_count,
+                                                                                 morbid_gene_overlap_count,
+                                                                                 query.type)[0:-68]
 
-    return jsonify({'ucsc_url': ucsc_url})
+    return jsonify({'ucsc_url': ucsc_url,
+                    'cnv_len': cnv_len,
+                    'cnv_type': cnv_type,
+                    'exc_overlaps': exclude_overlaps,
+                    'gene_overlap_count': gene_overlap_count,
+                    'morbid_gene_overlap_count': morbid_gene_overlap_count,
+                    'dgv_gold_cnv_overlap_count': dgv_gold_cnv_overlap_count,
+                    'xcnv_res': xcnv_res,
+                    'xcnv_res_interpretation': xcnv_res_interpretation,
+                    'synth_interpretation': synth_interpretation})
 
 
 def run_server():

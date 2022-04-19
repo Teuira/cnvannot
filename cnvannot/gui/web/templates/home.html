@@ -49,10 +49,33 @@
 
     function show_res(annotations) {
         let res_div = document.getElementById('res_div');
+        res_div.innerHTML += "<br>"
         res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC</a>"
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "CNV Length: " + annotations['cnv_len']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "CNV Type: " + annotations['cnv_type']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Overlaps with excluded regions: " + annotations['exc_overlaps']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Gene overlaps (any overlap): " + annotations['gene_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "DGV gold overlaps (any overlap > 1% frequency): " + annotations['dgv_gold_cnv_overlap_count']
+
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Interpretation: " + annotations['synth_interpretation']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "*** The machine interpretation doesn't replace Human interpretation"
     }
 
     function reset_search() {
         document.getElementById('query_input').value = '';
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = ''
     }
 </script>
