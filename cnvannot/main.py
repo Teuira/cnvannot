@@ -28,9 +28,8 @@ else:
     else:
         # CMD-Line mode
         query = coordinates_from_string(sys.argv[1])
-
-if query is None:
-    print("Something went wrong!")
-    exit(1)
+        if query is None:
+            print("Something went wrong!")
+            exit(1)
 
 print("END")
