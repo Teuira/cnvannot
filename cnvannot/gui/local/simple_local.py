@@ -54,7 +54,7 @@ class LocalGui(tk.Frame):
         self.refseq_db = refseq_load()
         self.omim_mg_db = omim_morbid_genes_load()
         self.encode_db = encode_load()
-        print("XCNV is available" if xcnv_is_avail() else "XCNV is NOT available")
+        print("X-CNV is available" if xcnv_is_avail() else "X-CNV is NOT available")
         print('...DBs loaded!')
 
     def analyze(self):
