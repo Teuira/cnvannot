@@ -79,7 +79,8 @@ class LocalGui(tk.Frame):
         xcnv_res = xcnv_predict(query)['xcnv']['prediction']
         self.res_lbl['text'] += 'X-CNV: ' + f'{xcnv_res:1.2f}' + ' (' + xcnv_interpretation_from_score(xcnv_res) + ')\n'
         # ENCODE
-        self.res_lbl['text'] += 'Intersects excluded regions: ' + str(query_overlaps(self.encode_db, query)) + '\n '
+        exclude_overlaps = query_overlaps(self.encode_db, query)
+        self.res_lbl['text'] += 'Intersects excluded regions: ' + str(exclude_overlaps) + '\n '
         # RefSeq
         gene_overlap_count = query_overlap_count(self.refseq_db, query)
         self.res_lbl['text'] += 'Number of genes intersected: ' + str(gene_overlap_count) + '\n'
@@ -91,10 +92,12 @@ class LocalGui(tk.Frame):
         self.res_lbl['text'] += 'Overlaps DGV Gold CNVs: ' + str(dgv_gold_cnv_overlap_count) + '\n'
 
         # Interpretation
-        self.res_lbl['text'] += '\nInterpretation suggestion: ' + interpretation_get(xcnv_res,
-                                                                                     gene_overlap_count,
-                                                                                     morbid_gene_overlap_count,
-                                                                                     query.type) + '\n'
+        if xcnv_is_avail():
+            self.res_lbl['text'] += '\nInterpretation suggestion: ' + interpretation_get(xcnv_res,
+                                                                                         exclude_overlaps,
+                                                                                         gene_overlap_count,
+                                                                                         morbid_gene_overlap_count,
+                                                                                         query.type) + '\n'
 
     @staticmethod
     def url_callback(url):
