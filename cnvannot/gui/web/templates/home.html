@@ -22,14 +22,14 @@
 
         let httpRequest = new XMLHttpRequest();
         httpRequest.timeout = 120000;
-        //httpRequest.responseType = 'json';
+        httpRequest.responseType = 'json';
         httpRequest.open('GET', '/search/' + str_query, true);
         httpRequest.onreadystatechange = function () {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 let status = httpRequest.status;
                 if (status === 0 || (status >= 200 && status < 400)) {
                     // OK
-                    alert(httpRequest.responseText);
+                    show_res(httpRequest.response);
                 } else {
                     // ERROR
                     alert("Sorry, Something went wrong!");
@@ -37,26 +37,11 @@
             }
         };
         httpRequest.send();
+    }
 
-
-        /*
-        let req = new XMLHttpRequest();
-        req.responseType = 'json';
-        req.open('GET', '/search/' + str_query, true);
-        req.timeout = 120000
-        req.onload = function () {
-            let jsonResponse = req.response;
-            alert("response?");
-            alert(jsonResponse);
-            // do something with jsonResponse
-        };
-        req.ontimeout = function (e) {
-            // XMLHttpRequest timed out. Do something here.
-            alert("timed out!")
-        };
-        req.send(null);
-
-         */
+    function show_res(annotations) {
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC</a>"
     }
 
     function reset_search() {
