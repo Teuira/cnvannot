@@ -39,10 +39,10 @@ class LocalGui(tk.Frame):
         self.res_lbl = tk.Label(text="Press GO to analyze.\n")
         self.res_lbl.pack()
 
-        self.go_btn = tk.Button(text="GO", width=20, command=self.analyze)
+        self.go_btn = tk.Button(text="GO", width=20, command=self.analyze, background='green')
         self.go_btn.pack()
 
-        self.reset_btn = tk.Button(text="Reset", width=20, command=self.reset)
+        self.reset_btn = tk.Button(text="Reset", width=20, command=self.reset, background='red')
         self.reset_btn.pack()
 
     def load_dbs(self):
