@@ -3,8 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>CNV Annot</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-Prova
+
+<input id="query_input" value="hg19:chr2:1000000-2000000:gain">
+<button onclick="start_search()">Search</button>
+<button onclick="reset_search()">Reset</button>
+
+<div id="res_div"></div>
+
 </body>
 </html>
+
+<script>
+    function start_search() {
+        let str_query = document.getElementById('query_input').value;
+
+        let httpRequest = new XMLHttpRequest();
+        httpRequest.timeout = 120000;
+        //httpRequest.responseType = 'json';
+        httpRequest.open('GET', '/search/' + str_query, true);
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                let status = httpRequest.status;
+                if (status === 0 || (status >= 200 && status < 400)) {
+                    // OK
+                    alert(httpRequest.responseText);
+                } else {
+                    // ERROR
+                    alert("Sorry, Something went wrong!");
+                }
+            }
+        };
+        httpRequest.send();
+
+
+        /*
+        let req = new XMLHttpRequest();
+        req.responseType = 'json';
+        req.open('GET', '/search/' + str_query, true);
+        req.timeout = 120000
+        req.onload = function () {
+            let jsonResponse = req.response;
+            alert("response?");
+            alert(jsonResponse);
+            // do something with jsonResponse
+        };
+        req.ontimeout = function (e) {
+            // XMLHttpRequest timed out. Do something here.
+            alert("timed out!")
+        };
+        req.send(null);
+
+         */
+    }
+
+    function reset_search() {
+        document.getElementById('query_input').value = '';
+    }
+</script>

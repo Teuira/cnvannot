@@ -1,3 +1,4 @@
+import gevent
 from flask import Flask
 from flask import render_template
 from flask import jsonify
@@ -27,7 +28,7 @@ def main_page():
     return render_template('home.html')
 
 
-@app.route("/search/<str_query>", methods=['POST'])
+@app.route("/search/<str_query>", methods=['GET'])
 def search(str_query: str):
     query = coordinates_from_string(str_query)
     ucsc_url = str(ucsc_get_annotation_link(query)['ucsc']['link'])
@@ -54,9 +55,12 @@ def search(str_query: str):
 
 
 def run_server():
-    from gevent.pywsgi import WSGIServer
+    # dev server
+    app.run()
+    return
 
+    # gevent (production)
+    from gevent.pywsgi import WSGIServer
     http_server = WSGIServer(('', 5000), app)
     print('Server is running on: http://127.0.0.1:5000')
     http_server.serve_forever()
-
