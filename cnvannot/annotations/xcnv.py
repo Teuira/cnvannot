@@ -31,7 +31,7 @@ def xcnv_predict(query: GenomicCoordinates) -> dict:
 
     prediction = ''
 
-    for i in range(20):
+    for i in range(30):
         curr_out = cont.logs()
         if len(curr_out) > 0:
             possible_prediction = curr_out.split()[-1]
