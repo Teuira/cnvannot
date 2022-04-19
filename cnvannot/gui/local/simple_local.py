@@ -93,11 +93,11 @@ class LocalGui(tk.Frame):
 
         # Interpretation
         if xcnv_is_avail():
-            self.res_lbl['text'] += '\nInterpretation suggestion: ' + interpretation_get(xcnv_res,
-                                                                                         exclude_overlaps,
-                                                                                         gene_overlap_count,
-                                                                                         morbid_gene_overlap_count,
-                                                                                         query.type) + '\n'
+            self.res_lbl['text'] += '\nInterpretation suggestion(s): ' + interpretation_get(xcnv_res,
+                                                                                            exclude_overlaps,
+                                                                                            gene_overlap_count,
+                                                                                            morbid_gene_overlap_count,
+                                                                                            query.type) + '\n'
 
     @staticmethod
     def url_callback(url):
