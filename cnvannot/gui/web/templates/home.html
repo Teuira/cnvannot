@@ -1,23 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CNV Annot</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-</head>
-<body onload="browser_check()">
+{% extends "layout.html" %}
 
-<input id="query_input" value="hg19:chr2:1000000-2000000:gain">
-<button onclick="start_search()">Search</button>
-<button onclick="reset_search()">Reset</button>
+{% block content %}
+<div onload="browser_check()">
 
-<div id="res_div"></div>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <div class="container">
+        <br/>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input id="query_input" class="form-control form-control-lg form-control-borderless" type="search"
+                                   placeholder="<ref>:<chr>:<start>-<stop>:<gain|loss>">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-primary" style="width: 150px" onclick="start_search()">Search</button>
+                            <button class="btn btn-lg btn-danger" style="width: 150px" onclick="reset_search()">Reset</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </div>
+            </div>
+            <!--end of col-->
+        </div>
+        <br/>
+        <div id="res_card" class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto align-content-center">
+                            <!--<img src="../static/images/RabbitAnimation.gif">-->
+                            <div id="res_div"></div>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </div>
+            </div>
+            <!--end of col-->
+        </div>
+    </div>
 
-</body>
-</html>
+</div>
+{% endblock %}
 
+
+{% block script %}
 <script>
-
     function browser_check() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
@@ -54,7 +89,7 @@
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
         res_div.innerHTML += "<br>"
-        res_div.innerHTML += "CNV Length: " + annotations['cnv_len']
+        res_div.innerHTML += "CNV Length: " + annotations['cnv_len'] + 'bases'
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "CNV Type: " + annotations['cnv_type']
         res_div.innerHTML += "<br>"
@@ -79,3 +114,7 @@
         res_div.innerHTML = ''
     }
 </script>
+{% endblock %}
+
+
+
