@@ -43,7 +43,7 @@ def batch():
     return render_template('batch.html')
 
 
-@app.route("/search/<str_query>", methods=['GET'])
+@app.route("/search/<str_query>", methods=['POST'])
 def search(str_query: str):
     query = coordinates_from_string(str_query)
     ucsc_url = str(ucsc_get_annotation_link(query)['ucsc']['link'])

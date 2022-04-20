@@ -96,7 +96,7 @@
         let httpRequest = new XMLHttpRequest();
         httpRequest.timeout = 120000;
         httpRequest.responseType = 'json';
-        httpRequest.open('GET', '/search/' + str_query, true);
+        httpRequest.open('POST', '/search/' + str_query, true);
         httpRequest.onreadystatechange = function () {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 let status = httpRequest.status;
