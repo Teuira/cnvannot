@@ -38,7 +38,7 @@
         <div id="res_card" class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-10">
                 <div class="card card-sm">
-                    <div class="card-body row no-gutters align-items-center">
+                    <div class="card-body row no-gutters align-items-center" style="flex-direction: column">
                         <div class="col-auto align-content-center">
                             <div id="res_div"></div>
                         </div>
@@ -79,10 +79,13 @@
 
     function clear_res_div() {
         let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '';
     }
 
     function paste_example() {
         document.getElementById('query_input').value = example_query;
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '<img src="../static/images/tuto_get_started_cnv_hub.gif">'
     }
 
     function start_search() {
