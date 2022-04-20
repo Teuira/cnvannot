@@ -38,6 +38,11 @@ def about():
     return render_template('about.html')
 
 
+@app.route("/batch", methods=['GET'])
+def batch():
+    return render_template('batch.html')
+
+
 @app.route("/search/<str_query>", methods=['GET'])
 def search(str_query: str):
     query = coordinates_from_string(str_query)
