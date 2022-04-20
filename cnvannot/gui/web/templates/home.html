@@ -8,7 +8,7 @@
     <div class="container">
         <br/>
         <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
+            <div class="col-12 col-md-10 col-lg-10">
                 <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
@@ -32,7 +32,7 @@
         </div>
         <br/>
         <div id="res_card" class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
+            <div class="col-12 col-md-10 col-lg-10">
                 <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto align-content-center">
@@ -92,7 +92,7 @@
     function show_res(annotations) {
         let res_div = document.getElementById('res_div');
         res_div.innerHTML += "<br>"
-        res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC</a>"
+        res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC Browser</a>"
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
         res_div.innerHTML += "<br>"
