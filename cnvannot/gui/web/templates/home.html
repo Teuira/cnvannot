@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div onload="browser_check()">
+<div>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -16,13 +16,17 @@
                         </div>
                         <!--end of col-->
                         <div class="col">
-                            <input id="query_input" class="form-control form-control-lg form-control-borderless" type="search"
+                            <input id="query_input" class="form-control form-control-lg form-control-borderless"
+                                   type="search"
                                    placeholder="<ref>:<chr>:<start>-<stop>:<gain|loss>">
                         </div>
                         <!--end of col-->
                         <div class="col-auto">
-                            <button class="btn btn-lg btn-primary" style="width: 150px" onclick="start_search()">Search</button>
-                            <button class="btn btn-lg btn-danger" style="width: 150px" onclick="reset_search()">Reset</button>
+                            <button class="btn btn-lg btn-primary" style="width: 150px" onclick="start_search()">
+                                Search
+                            </button>
+                            <button class="btn btn-lg btn-danger" style="width: 150px" onclick="reset_search()">Reset
+                            </button>
                         </div>
                         <!--end of col-->
                     </div>
@@ -36,8 +40,7 @@
                 <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto align-content-center">
-                            <!--<img src="../static/images/RabbitAnimation.gif">-->
-                            <div id="res_div"></hr><h3>Example:</h3><br><h4>hg19:chr2:1000000-2000000:gain</h4></div>
+                            <div id="res_div"></div>
                         </div>
                         <!--end of col-->
                     </div>
@@ -53,6 +56,15 @@
 
 {% block script %}
 <script>
+
+    const example_query = 'hg19:chr2:1000000-2000000:gain';
+
+    window.addEventListener('load', function () {
+        browser_check();
+        reset_search();
+    })
+
+
     function browser_check() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
@@ -63,6 +75,14 @@
     function show_load() {
         let res_div = document.getElementById('res_div');
         res_div.innerHTML = 'Loading...';
+    }
+
+    function clear_res_div() {
+        let res_div = document.getElementById('res_div');
+    }
+
+    function paste_example() {
+        document.getElementById('query_input').value = example_query;
     }
 
     function start_search() {
@@ -79,6 +99,7 @@
                 let status = httpRequest.status;
                 if (status === 0 || (status >= 200 && status < 400)) {
                     // OK
+                    clear_res_div();
                     show_res(httpRequest.response);
                 } else {
                     // ERROR
@@ -118,7 +139,7 @@
     function reset_search() {
         document.getElementById('query_input').value = '';
         let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '</hr><h3>Example:</h3><br><h4>hg19:chr2:1000000-2000000:gain</h4>'
+        res_div.innerHTML = '</hr><h3>Example:</h3><br><h4>' + example_query + '  <a href="#" onclick="paste_example()">Try</a></h4>';
     }
 </script>
 {% endblock %}
