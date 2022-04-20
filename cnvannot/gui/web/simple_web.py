@@ -28,6 +28,16 @@ def main_page():
     return render_template('home.html')
 
 
+@app.route("/useful_links", methods=['GET'])
+def useful_links():
+    return render_template('useful_links.html')
+
+
+@app.route("/about", methods=['GET'])
+def about():
+    return render_template('about.html')
+
+
 @app.route("/search/<str_query>", methods=['GET'])
 def search(str_query: str):
     query = coordinates_from_string(str_query)
@@ -65,8 +75,8 @@ def search(str_query: str):
 
 def run_server():
     # dev server
-    app.run()
-    return
+    # app.run()
+    # return
 
     # gevent (production)
     from gevent.pywsgi import WSGIServer
