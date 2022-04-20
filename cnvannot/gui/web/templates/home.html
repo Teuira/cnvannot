@@ -37,7 +37,7 @@
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto align-content-center">
                             <!--<img src="../static/images/RabbitAnimation.gif">-->
-                            <div id="res_div"></div>
+                            <div id="res_div"></hr><h3>Example:</h3><br><h4>hg19:chr2:1000000-2000000:gain</h4></div>
                         </div>
                         <!--end of col-->
                     </div>
@@ -111,7 +111,7 @@
     function reset_search() {
         document.getElementById('query_input').value = '';
         let res_div = document.getElementById('res_div');
-        res_div.innerHTML = ''
+        res_div.innerHTML = '</hr><h3>Example:</h3><br><h4>hg19:chr2:1000000-2000000:gain</h4>'
     }
 </script>
 {% endblock %}
