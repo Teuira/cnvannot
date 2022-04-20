@@ -30,7 +30,7 @@ def main_page():
 
 @app.route("/useful_links", methods=['GET'])
 def useful_links():
-    return render_template('useful_links.html')
+    return render_template('links.html')
 
 
 @app.route("/about", methods=['GET'])
