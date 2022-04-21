@@ -57,7 +57,7 @@ def search(str_query: str):
     xcnv_res = None
     xcnv_res_interpretation = None
     if xcnv_avail:
-        xcnv_res = xcnv_predict(query)['xcnv']['prediction']
+        xcnv_res = xcnv_predict([query])[0]['xcnv']['prediction']
         xcnv_res_interpretation = xcnv_interpretation_from_score(xcnv_res) + '\n'
 
     synth_interpretation = 'Interpretation suggestion(s): ' + interpretation_get(xcnv_res,

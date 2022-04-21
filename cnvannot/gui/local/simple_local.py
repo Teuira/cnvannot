@@ -76,7 +76,7 @@ class LocalGui(tk.Frame):
         self.res_lbl['text'] += 'CNV length: ' + f'{(query.end - query.start):,}' + ' bases\n'
         self.res_lbl['text'] += 'Type: ' + str.upper(query.type) + '\n'
         # X-CNV
-        xcnv_res = xcnv_predict(query)['xcnv']['prediction']
+        xcnv_res = xcnv_predict([query])[0]['xcnv']['prediction']
         self.res_lbl['text'] += 'X-CNV: ' + f'{xcnv_res:1.2f}' + ' (' + xcnv_interpretation_from_score(xcnv_res) + ')\n'
         # ENCODE
         exclude_overlaps = query_overlaps(self.encode_db, query)
