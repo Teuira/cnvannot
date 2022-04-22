@@ -226,7 +226,7 @@
         if (upload_type === 'coord') {
             let coords = document.getElementById('txtCoords');
             // Process data.
-            text_submit(coords);
+            text_submit(coords.value);
         } else if (upload_type === 'bed') {
             // Process file.
             fileSubmit();
@@ -238,15 +238,19 @@
     function text_submit(txt) {
         let httpRequest = new XMLHttpRequest();
         httpRequest.open("POST", "/batch_text", true);
+        httpRequest.responseType = 'json';
         httpRequest.onload = function () {
             if (httpRequest.status === 200) {
                 // OK
+                let el = document.getElementById('next4');
+                el.style.display = 'none';
+                reportResult(httpRequest.response);
             } else {
                 alert('Something went wrong!');
             }
         };
 
-        httpRequest.send(txt);
+        httpRequest.send(JSON.stringify({'ref': ref, 'lines': txt}));
     }
 
     function fileSubmit() {

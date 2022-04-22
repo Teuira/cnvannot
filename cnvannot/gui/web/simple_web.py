@@ -1,4 +1,5 @@
 import gevent
+import json
 from flask import Flask, render_template, jsonify, request
 
 from cnvannot.annotations.dgv import dgv_gold_load
@@ -41,16 +42,7 @@ def batch():
     return render_template('batch.html')
 
 
-@app.route("/batch_text", methods=['POST'])
-def batch_text():
-    file = request.data
-    return "ok"
-
-
-@app.route("/batch_file", methods=['POST'])
-def batch_file():
-    lines = request.files['file'].read().decode('ascii').splitlines()
-    ref = request.form['ref']
+def common_batch(ref, lines):
     queries = []
     for line in lines:
         queries.append(coordinates_from_string(line))
@@ -96,6 +88,26 @@ def batch_file():
     return jsonify(
         {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
          'go': gene_overlap_res, 'mo': omim_morbid_overlap_res, 'interpretation': interpretation_res})
+
+
+@app.route("/batch_text", methods=['POST'])
+def batch_text():
+    json_data = json.loads(request.data.decode('ascii'))
+    ref = json_data['ref']
+    lines = json_data['lines'].splitlines()
+    lines2 = []
+    for line in lines:
+        lines2.append(ref + ':' + line)
+
+    return common_batch(ref, lines2)
+
+
+@app.route("/batch_file", methods=['POST'])
+def batch_file():
+    ref = request.form['ref']
+    lines = request.files['file'].read().decode('ascii').splitlines()
+
+    return common_batch(ref, lines)
 
 
 @app.route("/search/<str_query>", methods=['POST'])
