@@ -106,8 +106,12 @@ def batch_text():
 def batch_file():
     ref = request.form['ref']
     lines = request.files['file'].read().decode('ascii').splitlines()
+    lines2 = []
+    for line in lines:
+        parts = line.split('\t')
+        lines2.append(ref + ':' + parts[0] + ':' + parts[1] + '-' + parts[2] + ':' + parts[3])
 
-    return common_batch(ref, lines)
+    return common_batch(ref, lines2)
 
 
 @app.route("/search/<str_query>", methods=['POST'])
