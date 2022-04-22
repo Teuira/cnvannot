@@ -1,7 +1,5 @@
 import gevent
-from flask import Flask
-from flask import render_template
-from flask import jsonify
+from flask import Flask, render_template, jsonify, request
 
 from cnvannot.annotations.dgv import dgv_gold_load
 from cnvannot.annotations.encode import encode_load
@@ -41,6 +39,63 @@ def about():
 @app.route("/batch", methods=['GET'])
 def batch():
     return render_template('batch.html')
+
+
+@app.route("/batch_text", methods=['POST'])
+def batch_text():
+    file = request.data
+    return "ok"
+
+
+@app.route("/batch_file", methods=['POST'])
+def batch_file():
+    lines = request.files['file'].read().decode('ascii').splitlines()
+    ref = request.form['ref']
+    queries = []
+    for line in lines:
+        queries.append(coordinates_from_string(line))
+
+    # X-CNV
+    xcnv_res = []
+    if ref == 'hg19':
+        xcnv_res = xcnv_predict(queries)
+
+    # OTHERS
+    ucsc_res = []
+    dgv_res = []
+    cnv_len_res = []
+    cnv_type_res = []
+    exc_res = []
+    gene_overlap_res = []
+    omim_morbid_overlap_res = []
+    interpretation_res = []
+    for i in range(len(queries)):
+        ucsc_res.append(ucsc_get_annotation_link(queries[i]))
+
+        dgv_over = dgv_gold_overlap_count_1_percent(dgv_db, queries[i])
+        dgv_res.append(dgv_over)
+
+        cn_len = queries[i].end - queries[i].start
+        cnv_len_res.append(f'{cn_len:,}')
+
+        cn_type = str.upper(queries[i].type)
+        cnv_type_res.append(cn_type)
+
+        exc_over = query_overlaps(encode_db, queries[i])
+        exc_res.append(exc_over)
+
+        g_over = query_overlap_count(refseq_db, queries[i])
+        gene_overlap_res.append(g_over)
+
+        m_over = query_overlap_count(omim_mg_db, queries[i])
+        omim_morbid_overlap_res.append(m_over)
+
+        interpretation_res.append(interpretation_get(xcnv_res[i]['xcnv']['prediction'],
+                                                     exc_over, g_over, m_over, cn_type))
+
+    return jsonify(
+        {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
+         'go': gene_overlap_res, 'mo': omim_morbid_overlap_res, 'interpretation': interpretation_res})
 
 
 @app.route("/search/<str_query>", methods=['POST'])
