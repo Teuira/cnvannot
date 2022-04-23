@@ -14,7 +14,9 @@ On propose aussi l'intégration de l'outil X-CNV (https://github.com/kbvstmd/XCN
 
 ## Installation
 
-Coming...
+A Release package is available [here](https://github.com/Teuira/cnvhub/releases).
+Instructions to get started inside the released zip file.
+
 
 ## Contributeurs
 
