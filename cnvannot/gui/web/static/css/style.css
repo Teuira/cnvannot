@@ -1,0 +1,19 @@
+body {
+    background: url('../images/cnv_hub_wall.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+.card {
+    opacity: 0.7;
+}
+
+.card:hover {
+    opacity: 1;
+}
