@@ -7,6 +7,7 @@ from cnvannot.annotations.encode import encode_load
 from cnvannot.annotations.omim import omim_morbid_genes_load
 from cnvannot.annotations.refseq import refseq_load
 from cnvannot.annotations.ucsc import ucsc_get_annotation_link
+from cnvannot.annotations.special.france_incomplete_penetrance import france_incomplete_penetrance_load
 from cnvannot.annotations.xcnv import xcnv_is_avail
 from cnvannot.annotations.xcnv import xcnv_predict, xcnv_interpretation_from_score
 from cnvannot.common.coordinates import coordinates_from_string
@@ -24,6 +25,7 @@ class LocalGui(tk.Frame):
         self.refseq_db = None
         self.omim_mg_db = None
         self.encode_db = None
+        self.france_inc_pen = None
 
         self.load_dbs()
 
@@ -54,6 +56,7 @@ class LocalGui(tk.Frame):
         self.refseq_db = refseq_load()
         self.omim_mg_db = omim_morbid_genes_load()
         self.encode_db = encode_load()
+        self.france_inc_pen = france_incomplete_penetrance_load()
         print("X-CNV is available" if xcnv_is_avail() else "X-CNV is NOT available")
         print('...DBs loaded!')
 
@@ -93,12 +96,14 @@ class LocalGui(tk.Frame):
 
         # Interpretation
         if xcnv_is_avail():
-            self.res_lbl['text'] += '\nInterpretation suggestion(s): ' + interpretation_get(xcnv_res,
+            self.res_lbl['text'] += '\nInterpretation suggestion(s): ' + interpretation_get(query,
+                                                                                            xcnv_res,
                                                                                             exclude_overlaps,
                                                                                             gene_overlap_count,
                                                                                             morbid_gene_overlap_count,
                                                                                             dgv_gold_cnv_overlap_count,
-                                                                                            query.type) + '\n'
+                                                                                            query.type,
+                                                                                            self.france_inc_pen) + '\n'
 
     @staticmethod
     def url_callback(url):

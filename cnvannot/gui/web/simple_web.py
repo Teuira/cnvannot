@@ -6,6 +6,7 @@ from cnvannot.annotations.dgv import dgv_gold_load
 from cnvannot.annotations.encode import encode_load
 from cnvannot.annotations.omim import omim_morbid_genes_load
 from cnvannot.annotations.refseq import refseq_load
+from cnvannot.annotations.special.france_incomplete_penetrance import france_incomplete_penetrance_load
 from cnvannot.annotations.ucsc import ucsc_get_annotation_link
 from cnvannot.annotations.xcnv import *
 from cnvannot.common.coordinates import coordinates_from_string
@@ -19,6 +20,7 @@ dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
 omim_mg_db = omim_morbid_genes_load()
 encode_db = encode_load()
+france_inc_pen_db = france_incomplete_penetrance_load()
 xcnv_avail = xcnv_is_avail()
 
 
@@ -82,8 +84,8 @@ def common_batch(ref, lines):
         m_over = query_overlap_count(omim_mg_db, queries[i])
         omim_morbid_overlap_res.append(m_over)
 
-        interpretation_res.append(interpretation_get(xcnv_res[i]['xcnv']['prediction'],
-                                                     exc_over, g_over, m_over, dgv_over, cn_type))
+        interpretation_res.append(interpretation_get(queries[i], xcnv_res[i]['xcnv']['prediction'],
+                                                     exc_over, g_over, m_over, dgv_over, cn_type, france_inc_pen_db))
 
     return jsonify(
         {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
@@ -131,12 +133,14 @@ def search(str_query: str):
         xcnv_res = xcnv_predict([query])[0]['xcnv']['prediction']
         xcnv_res_interpretation = xcnv_interpretation_from_score(xcnv_res) + '\n'
 
-    synth_interpretation = 'Interpretation suggestion(s): ' + interpretation_get(xcnv_res,
+    synth_interpretation = 'Interpretation suggestion(s): ' + interpretation_get(query,
+                                                                                 xcnv_res,
                                                                                  exclude_overlaps,
                                                                                  gene_overlap_count,
                                                                                  morbid_gene_overlap_count,
                                                                                  dgv_gold_cnv_overlap_count,
-                                                                                 query.type)[0:-68]
+                                                                                 query.type,
+                                                                                 france_inc_pen_db)[0:-68]
 
     return jsonify({'ucsc_url': ucsc_url,
                     'cnv_len': cnv_len,
