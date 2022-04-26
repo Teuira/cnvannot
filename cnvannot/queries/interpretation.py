@@ -1,8 +1,12 @@
 from cnvannot.annotations.xcnv import xcnv_interpretation_from_score
 
 
-def interpretation_get(xcnv_score: float, exc_over: bool, gene_count: int, omim_gene_count: int, cnv_type: str) -> str:
+def interpretation_get(xcnv_score: float, exc_over: bool, gene_count: int, omim_gene_count: int,
+                       dgv_gold_count: int, cnv_type: str) -> str:
     res = ''
+
+    if dgv_gold_count > 0:
+        return 'Since this variant overlaps one found in the DGV database, the variant could be considered benign'
 
     res += '' if exc_over is False else '\nThis variant overlaps an "Exclusion Region"' '\n' \
                                         'You may consider excluding it'
@@ -12,7 +16,7 @@ def interpretation_get(xcnv_score: float, exc_over: bool, gene_count: int, omim_
                'hence, this variant could be benign'
     if res == '':
         res = xcnv_interpretation_from_score(xcnv_score).upper()
-    res += '***\n\n'
-    res += "*** The machine interpretation doesn't replace Human interpretation"
+
+    res += "***\n\n*** The machine interpretation doesn't replace Human interpretation"
 
     return res

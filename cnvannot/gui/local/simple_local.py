@@ -97,6 +97,7 @@ class LocalGui(tk.Frame):
                                                                                             exclude_overlaps,
                                                                                             gene_overlap_count,
                                                                                             morbid_gene_overlap_count,
+                                                                                            dgv_gold_cnv_overlap_count,
                                                                                             query.type) + '\n'
 
     @staticmethod

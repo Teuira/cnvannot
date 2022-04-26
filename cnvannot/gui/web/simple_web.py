@@ -83,7 +83,7 @@ def common_batch(ref, lines):
         omim_morbid_overlap_res.append(m_over)
 
         interpretation_res.append(interpretation_get(xcnv_res[i]['xcnv']['prediction'],
-                                                     exc_over, g_over, m_over, cn_type))
+                                                     exc_over, g_over, m_over, dgv_over, cn_type))
 
     return jsonify(
         {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
@@ -135,6 +135,7 @@ def search(str_query: str):
                                                                                  exclude_overlaps,
                                                                                  gene_overlap_count,
                                                                                  morbid_gene_overlap_count,
+                                                                                 dgv_gold_cnv_overlap_count,
                                                                                  query.type)[0:-68]
 
     return jsonify({'ucsc_url': ucsc_url,
