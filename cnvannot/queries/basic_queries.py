@@ -3,6 +3,10 @@ from intervaltree import IntervalTree
 from cnvannot.common.coordinates import GenomicCoordinates
 
 
+def overlap_size(sta1, sta2, end1, end2):
+    return max(0, min(end1, end2) - max(sta1, sta2) + 1)
+
+
 def query_overlaps(db, query: GenomicCoordinates) -> bool:
     if query.chr in db:
         itree: IntervalTree = db[query.chr]
