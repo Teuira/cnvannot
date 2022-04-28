@@ -34,12 +34,14 @@ def xcnv_predict(queries) -> list:
     cont = client.containers.run('xcnvcl', xcnv_query, detach=True)
 
     prediction_float = []
+    timeout = True
 
     # Wait loop.
-    for i in range(30):
+    for i in range(300):
         curr_out = cont.logs()
         if len(curr_out) > 0:
             # Output received.
+            timeout = False
             possible_prediction = curr_out.split()[-1]
             prediction_parts = possible_prediction.decode('ascii').split(',')
             sanity_check_count = int(prediction_parts[0])
@@ -51,6 +53,9 @@ def xcnv_predict(queries) -> list:
 
             break
         sleep(1)
+
+    if timeout:
+        raise Exception("Timeout Exception")
 
     ret_dict_list = []
     for i in range(len(queries)):
