@@ -1,8 +1,7 @@
 
+# Groupe 1 Datathon 2022
 ![Logo](https://pole-bfcare.com/wp-content/uploads/2022/01/3eme-datathon.jpg)
-![Tree](cnvannot/gui/web/static/images/datathon_2022_groupe1.gif)
 
-# Groupe 1 Datahon 2022
 ## \#Genetic VOUS IA
 Défi n°1
 Développer un outil de classification des variations génomiques de signification inconnue ou VOUS
@@ -11,8 +10,11 @@ Lors d'une analyse chromosomique, il y a la mise en évidence d'anomalies chromo
 Pour pouvoir définir si cette anomalie peut comporter un risque pour la personne, on utilise le diagramme ci-dessous
 On propose aussi l'intégration de l'outil X-CNV (https://github.com/kbvstmd/XCNV)
 
+![Tree](cnvannot/gui/web/static/images/datathon_2022_groupe1.gif)
 
 ## Installation
+
+![Logo](cnvannot/gui/web/static/images/cnv_hub_logo.png)
 
 A Release package is available [here](https://github.com/Teuira/cnvhub/releases).
 Instructions to get started inside the released zip file.
