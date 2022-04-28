@@ -20,6 +20,7 @@ def omim_morbid_genes_load():
             gene = parts[0]
             if parts[0] not in gene_dict:
                 gene_dict[gene] = {"morbid": parts[1]}
+                # TODO: IMPLEMENT
 
     serialization_serialize(gene_dict, omim_mg_base_file)
 
