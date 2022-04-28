@@ -12,7 +12,7 @@ from cnvannot.annotations.xcnv import *
 from cnvannot.common.coordinates import coordinates_from_string
 from cnvannot.queries.basic_queries import *
 from cnvannot.queries.interpretation import interpretation_get
-from cnvannot.queries.specific_queries import dgv_gold_overlap_count_1_percent
+from cnvannot.queries.specific_queries import dgv_gold_overlap_count_1_percent, exc_overlaps_70_percent
 
 app = Flask(__name__)
 
@@ -75,7 +75,7 @@ def common_batch(ref, lines):
         cn_type = str.upper(queries[i].type)
         cnv_type_res.append(cn_type)
 
-        exc_over = query_overlaps(encode_db, queries[i])
+        exc_over = exc_overlaps_70_percent(encode_db, queries[i])
         exc_res.append(exc_over)
 
         g_over = query_overlap_count(refseq_db, queries[i])
@@ -122,7 +122,7 @@ def search(str_query: str):
     ucsc_url = str(ucsc_get_annotation_link(query)['ucsc']['link'])
     cnv_len = f'{(query.end - query.start):,}'
     cnv_type = str.upper(query.type)
-    exclude_overlaps = query_overlaps(encode_db, query)
+    exclude_overlaps = exc_overlaps_70_percent(encode_db, query)
     gene_overlap_count = query_overlap_count(refseq_db, query)
     morbid_gene_overlap_count = query_overlap_count(omim_mg_db, query)
     dgv_gold_cnv_overlap_count = dgv_gold_overlap_count_1_percent(dgv_db, query)

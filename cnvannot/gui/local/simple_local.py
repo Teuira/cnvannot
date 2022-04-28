@@ -82,7 +82,7 @@ class LocalGui(tk.Frame):
         xcnv_res = xcnv_predict([query])[0]['xcnv']['prediction']
         self.res_lbl['text'] += 'X-CNV: ' + f'{xcnv_res:1.2f}' + ' (' + xcnv_interpretation_from_score(xcnv_res) + ')\n'
         # ENCODE
-        exclude_overlaps = query_overlaps(self.encode_db, query)
+        exclude_overlaps = exc_overlaps_70_percent(self.encode_db, query)
         self.res_lbl['text'] += 'Intersects excluded regions: ' + str(exclude_overlaps) + '\n '
         # RefSeq
         gene_overlap_count = query_overlap_count(self.refseq_db, query)
