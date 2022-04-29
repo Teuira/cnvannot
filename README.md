@@ -18,7 +18,7 @@ On propose aussi l'intégration de l'outil X-CNV (https://github.com/kbvstmd/XCN
 
 A Release package is available [here](https://github.com/Teuira/cnvhub/releases).
 Instructions to get started inside the released zip file.
-
+WARNING: Only hg19 reference is fully working!
 
 ## Contributeurs
 
