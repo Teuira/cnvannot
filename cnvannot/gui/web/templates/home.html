@@ -3,9 +3,13 @@
 {% block content %}
 <div>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" rel="stylesheet">
     <div class="container">
+        <br/>
+        <div class="alert alert-warning" role="alert">
+            Warning: HG38 not Yet implemented!
+        </div>
         <br/>
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-10">
@@ -16,16 +20,16 @@
                         </div>
                         <!--end of col-->
                         <div class="col">
-                            <input id="query_input" class="form-control form-control-lg form-control-borderless"
-                                   type="search"
-                                   placeholder="<ref>:<chr>:<start>-<stop>:<gain|loss>">
+                            <input class="form-control form-control-lg form-control-borderless" id="query_input"
+                                   placeholder="<ref>:<chr>:<start>-<stop>:<gain|loss>"
+                                   type="search">
                         </div>
                         <!--end of col-->
                         <div class="col-auto">
-                            <button class="btn btn-lg btn-primary" style="width: 150px" onclick="start_search()">
+                            <button class="btn btn-lg btn-primary" onclick="start_search()" style="width: 150px">
                                 Search
                             </button>
-                            <button class="btn btn-lg btn-danger" style="width: 150px" onclick="reset_search()">Reset
+                            <button class="btn btn-lg btn-danger" onclick="reset_search()" style="width: 150px">Reset
                             </button>
                         </div>
                         <!--end of col-->
@@ -35,7 +39,7 @@
             <!--end of col-->
         </div>
         <br/>
-        <div id="res_card" class="row justify-content-center">
+        <div class="row justify-content-center" id="res_card">
             <div class="col-12 col-md-10 col-lg-10">
                 <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center" style="flex-direction: column">
