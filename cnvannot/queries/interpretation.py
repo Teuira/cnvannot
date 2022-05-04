@@ -17,6 +17,9 @@ def interpretation_get(query: GenomicCoordinates, xcnv_score: float, exc_over: b
         return 'Since this variant overlaps one found in the DGV database, the variant could be considered benign' \
                + warning_msg
 
+    if omim_gene_count > 0:
+        return "Variant overlaps OMIM genes: LIKELY PATHOGENIC!" + warning_msg
+
     res += '' if exc_over is False else '\nThis variant overlaps an "Exclusion Region"' '\n' \
                                         'You may consider excluding it'
     if xcnv_score >= 0.5 and omim_gene_count == 0:
