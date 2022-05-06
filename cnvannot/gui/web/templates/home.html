@@ -34,6 +34,45 @@
                         </div>
                         <!--end of col-->
                     </div>
+
+                    <div class="card-footer">
+                        <div class="accordion" id="accordionOptions">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button aria-controls="collapseOne" aria-expanded="true" class="accordion-button"
+                                            data-bs-target="#collapseOne" data-bs-toggle="collapse"
+                                            type="button">
+                                        Options
+                                    </button>
+                                </h2>
+                                <div aria-labelledby="headingOne" class="accordion-collapse collapse"
+                                     data-bs-parent="#accordionOptions"
+                                     id="collapseOne">
+                                    <div class="accordion-body">
+                                        <label for="organ_input">Choose an Organ/System:</label>
+                                        <select class="form-select" id="organ_input" name="Input Type">
+                                            <option value="">(no filter)</option>
+                                            <option value="skin">Skin</option>
+                                            <option value="ear">Ear</option>
+                                            <option value="brain/cognition">Brain/Cognition</option>
+                                            <option value="face">Face</option>
+                                            <option value="skeleton">Skeleton</option>
+                                            <option value="endocrine">Endocrine</option>
+                                            <option value="kidney">Kidney</option>
+                                            <option value="musculature">Musculature</option>
+                                            <option value="gi tract">GI tract</option>
+                                            <option value="genitalia">Genitalia</option>
+                                            <option value="bone">Bone</option>
+                                            <option value="immune">Immune</option>
+                                            <option value="Respiratory">Respiratory</option>
+                                            <option value="lungs">Lungs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!--end of col-->
@@ -72,7 +111,7 @@
     function browser_check() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
-            alert("Sorry, This page won't work on Firefox. Please consider using another browser!");
+            //alert("Sorry, This page won't work on Firefox. Please consider using another browser!");
         }
     }
 
@@ -94,6 +133,7 @@
 
     function start_search() {
         let str_query = document.getElementById('query_input').value;
+        let str_organ = document.getElementById('organ_input').value;
 
         show_load();
 
@@ -114,7 +154,9 @@
                 }
             }
         };
-        httpRequest.send();
+        let formData = new FormData();
+        formData.append('organ', str_organ);
+        httpRequest.send(formData);
     }
 
     function show_res(annotations) {
@@ -133,6 +175,8 @@
         res_div.innerHTML += "Gene overlaps (any overlap): " + annotations['gene_overlap_count']
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count']
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "DGV gold overlaps (any overlap > 1% frequency): " + annotations['dgv_gold_cnv_overlap_count']
 

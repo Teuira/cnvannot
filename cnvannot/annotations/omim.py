@@ -1,4 +1,5 @@
 import os.path
+import csv
 
 from intervaltree import IntervalTree
 from cnvannot.common.serialization import *
@@ -26,12 +27,12 @@ def omim_morbid_genes_load():
         return serialization_deserialize(final_base)
 
     with open(ddg2p_base_path) as f:
-        for line in f:
-            if line.startswith('gene symbol'):
+        csvreader = csv.reader(f)
+        for line in csvreader:
+            if line[0] == 'gene symbol':
                 continue
-            parts = line.split(',')
-            omim_id = parts[1]
-            organ_list = parts[8].lower()
+            omim_id = line[1]
+            organ_list = line[8].lower()
             if omim_id in ddg2p_dict:
                 # Already in list: update.
                 ddg2p_dict[omim_id]['organ_list'] += ';' + organ_list

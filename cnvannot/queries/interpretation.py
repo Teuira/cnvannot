@@ -4,7 +4,7 @@ from cnvannot.queries.specific_queries import is_france_incomplete_penetrance
 
 
 def interpretation_get(query: GenomicCoordinates, xcnv_score: float, exc_over: bool, gene_count: int,
-                       omim_gene_count: int, dgv_gold_count: int, cnv_type: str, france_db) -> str:
+                       omim_gene_count: int, dgv_gold_count: int, cnv_type: str, france_db, organ_match_count) -> str:
     res = ''
 
     warning_msg = "***\n\n*** The machine interpretation doesn't replace Human interpretation"
@@ -17,7 +17,7 @@ def interpretation_get(query: GenomicCoordinates, xcnv_score: float, exc_over: b
         return 'Since this variant overlaps one found in the DGV database, the variant could be considered benign' \
                + warning_msg
 
-    if omim_gene_count > 0:
+    if organ_match_count > 0:
         return "Variant overlaps OMIM genes: LIKELY PATHOGENIC!" + warning_msg
 
     res += '' if exc_over is False else '\nThis variant overlaps an "Exclusion Region"' '\n' \

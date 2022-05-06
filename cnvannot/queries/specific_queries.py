@@ -1,5 +1,6 @@
 from cnvannot.common.coordinates import GenomicCoordinates
-from cnvannot.queries.basic_queries import overlap_size
+from cnvannot.queries.basic_queries import overlap_size, query_overlaps
+from intervaltree import IntervalTree
 
 
 def dgv_gold_overlap_count_1_percent(db, query: GenomicCoordinates) -> int:
@@ -37,3 +38,17 @@ def exc_overlaps_70_percent(db, query: GenomicCoordinates) -> bool:
                     return True
 
     return False
+
+
+def omim_match_organ(db, query: GenomicCoordinates, organ: str):
+    if not query_overlaps(db, query):
+        return 0
+    count = 0
+    if query.chr in db:
+        itree: IntervalTree = db[query.chr]
+        for interv in itree[query.start:query.end]:
+            organs = interv.data['organ_list']
+            if organ in organs:
+                count += 1
+
+    return count

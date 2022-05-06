@@ -4,7 +4,7 @@
 <div class="container">
 
     <br>
-    <div id="next1">
+    <div id="step1">
         <br/>
         <div class="alert alert-warning" role="alert">
             Warning: HG38 not Yet implemented!
@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Step 1/4</h5>
+                        <h5 class="card-title">Step 1/5</h5>
                         <p class="card-text">Select the genomic reference.</p>
                         <label for="refSelect">Choose a reference:</label>
                         <select class="form-select" id="refSelect" name="Reference">
@@ -34,20 +34,34 @@
         <br>
     </div>
 
-    <div id="next2">
+    <div id="step2">
+        <br/>
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img alt="Input data type" class="img-fluid rounded-start" src="../static/images/bed_or_list.png">
+                    <img alt="Genomic reference" class="img-fluid rounded-start" src="../static/images/dna_lat.png">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Step 2/4</h5>
-                        <p class="card-text">Input data type selection.</p>
-                        <label for="inputSelector">Choose an input type:</label>
-                        <select class="form-select" id="inputSelector" name="Input Type">
-                            <option value="coord">List of Genomic Coordinates</option>
-                            <option value="bed">BED File</option>
+                        <h5 class="card-title">Step 2/5</h5>
+                        <p class="card-text">Select additional options.</p>
+                        <label for="organSelect">Choose an Organ/System:</label>
+                        <select class="form-select" id="organSelect" name="Organ">
+                            <option value="">(no filter)</option>
+                            <option value="skin">Skin</option>
+                            <option value="ear">Ear</option>
+                            <option value="brain/cognition">Brain/Cognition</option>
+                            <option value="face">Face</option>
+                            <option value="skeleton">Skeleton</option>
+                            <option value="endocrine">Endocrine</option>
+                            <option value="kidney">Kidney</option>
+                            <option value="musculature">Musculature</option>
+                            <option value="gi tract">GI tract</option>
+                            <option value="genitalia">Genitalia</option>
+                            <option value="bone">Bone</option>
+                            <option value="immune">Immune</option>
+                            <option value="Respiratory">Respiratory</option>
+                            <option value="lungs">Lungs</option>
                         </select>
                     </div>
                 </div>
@@ -61,7 +75,34 @@
         <br>
     </div>
 
-    <div id="next3_1">
+    <div id="step3">
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img alt="Input data type" class="img-fluid rounded-start" src="../static/images/bed_or_list.png">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Step 3/5</h5>
+                        <p class="card-text">Input data type selection.</p>
+                        <label for="inputSelector">Choose an input type:</label>
+                        <select class="form-select" id="inputSelector" name="Input Type">
+                            <option value="coord">List of Genomic Coordinates</option>
+                            <option value="bed">BED File</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-center">
+            <button class="btn btn-warning" onclick="backToStep2()" style="width: 200px">Back</button>
+            <button class="btn btn-primary" onclick="showStep4()" style="width: 200px">Next</button>
+        </div>
+        <br>
+    </div>
+
+    <div id="step4_1">
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -69,7 +110,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Step 3/4</h5>
+                        <h5 class="card-title">Step 4/5</h5>
                         <p class="card-text">Paste coordinate list in the text area below.</p>
                         <div class="input-group">
                             <span class="input-group-text">With textarea</span>
@@ -83,13 +124,13 @@
         </div>
         <br>
         <div class="row justify-content-center">
-            <button class="btn btn-warning" onclick="backToStep2()" style="width: 200px">Back</button>
-            <button class="btn btn-primary" onclick="showStep4()" style="width: 200px">Next</button>
+            <button class="btn btn-warning" onclick="backToStep3()" style="width: 200px">Back</button>
+            <button class="btn btn-primary" onclick="showStep5()" style="width: 200px">Next</button>
         </div>
         <br>
     </div>
 
-    <div id="next3_2">
+    <div id="step4_2">
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -97,7 +138,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Step 3/4</h5>
+                        <h5 class="card-title">Step 4/5</h5>
                         <p class="card-text">Upload a bed file.</p>
                         <form enctype="multipart/form-data" method="post" name="frmUp">
                             <div class="mb-3">
@@ -111,13 +152,13 @@
         </div>
         <br>
         <div class="row justify-content-center">
-            <button class="btn btn-warning" onclick="backToStep2()" style="width: 200px">Back</button>
-            <button class="btn btn-primary" onclick="showStep4()" style="width: 200px">Next</button>
+            <button class="btn btn-warning" onclick="backToStep3()" style="width: 200px">Back</button>
+            <button class="btn btn-primary" onclick="showStep5()" style="width: 200px">Next</button>
         </div>
         <br>
     </div>
 
-    <div id="next4">
+    <div id="step5">
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -125,7 +166,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Step 4/4</h5>
+                        <h5 class="card-title">Step 5/5</h5>
                         <p class="card-text">Loading...</p>
                         Please wait until completion.
                     </div>
@@ -157,75 +198,92 @@
 
     let upload_type = '';
     let ref = '';
+    let organ = '';
 
     window.addEventListener('load', function () {
         browser_check();
-        document.getElementById('next1').style.display = 'block';
-        document.getElementById('next2').style.display = 'none';
-        document.getElementById('next3_1').style.display = 'none';
-        document.getElementById('next3_2').style.display = 'none';
-        document.getElementById('next4').style.display = 'none';
+        document.getElementById('step1').style.display = 'block';
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'none';
+        document.getElementById('step4_1').style.display = 'none';
+        document.getElementById('step4_2').style.display = 'none';
+        document.getElementById('step5').style.display = 'none';
         document.getElementById('resDiv').style.display = 'none';
     })
 
     function browser_check() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
-            alert("Sorry, This page won't work on Firefox. Please consider using another browser!");
+            //alert("Sorry, This page won't work on Firefox. Please consider using another browser!");
         }
     }
 
     function backToStep1() {
-        let el = document.getElementById('next2');
+        let el = document.getElementById('step2');
         el.style.display = 'none';
-        el = document.getElementById('next1');
+        el = document.getElementById('step1');
         el.style.display = 'block';
     }
 
     function backToStep2() {
-        let el = document.getElementById('next3_1');
+        let el = document.getElementById('step3');
         el.style.display = 'none';
-        el = document.getElementById('next3_2');
+        el = document.getElementById('step2');
+        el.style.display = 'block';
+    }
+
+    function backToStep3() {
+        let el = document.getElementById('step4_1');
         el.style.display = 'none';
-        el = document.getElementById('next2');
+        el = document.getElementById('step4_2');
+        el.style.display = 'none';
+        el = document.getElementById('step3');
         el.style.display = 'block';
     }
 
     function showStep2() {
-        let el = document.getElementById('next1');
+        let el = document.getElementById('step1');
         el.style.display = 'none';
-        el = document.getElementById('next2');
+        el = document.getElementById('step2');
         el.style.display = 'block';
         ref = document.getElementById('refSelect').value;
     }
 
     function showStep3() {
-        let el = document.getElementById('next2');
+        let el = document.getElementById('step2');
+        el.style.display = 'none';
+        el = document.getElementById('step3');
+        el.style.display = 'block';
+        organ = document.getElementById('organSelect').value;
+    }
+
+    function showStep4() {
+        let el = document.getElementById('step3');
         el.style.display = 'none';
         let dd_type = document.getElementById('inputSelector');
         if (dd_type.value === 'coord') {
             upload_type = 'coord';
-            el = document.getElementById('next3_1');
+            el = document.getElementById('step4_1');
             el.style.display = 'block';
-            el = document.getElementById('next3_2');
+            el = document.getElementById('step4_2');
             el.style.display = 'none';
         } else if (dd_type.value === 'bed') {
             upload_type = 'bed';
-            el = document.getElementById('next3_2');
+            el = document.getElementById('step4_2');
             el.style.display = 'block';
-            el = document.getElementById('next3_1');
+            el = document.getElementById('step4_1');
             el.style.display = 'none';
         } else {
             alert('Please select a valid input type before proceeding.');
         }
     }
 
-    function showStep4() {
-        let el = document.getElementById('next3_1');
+    function showStep5() {
+        let el = document.getElementById('step4_1');
         el.style.display = 'none';
-        el = document.getElementById('next3_2');
+        el = document.getElementById('step4_2');
         el.style.display = 'none';
-        el = document.getElementById('next4');
+        el = document.getElementById('step5');
         el.style.display = 'block';
         if (upload_type === 'coord') {
             let coords = document.getElementById('txtCoords');
@@ -246,7 +304,7 @@
         httpRequest.onload = function () {
             if (httpRequest.status === 200) {
                 // OK
-                let el = document.getElementById('next4');
+                let el = document.getElementById('step5');
                 el.style.display = 'none';
                 reportResult(httpRequest.response);
             } else {
@@ -254,7 +312,7 @@
             }
         };
 
-        httpRequest.send(JSON.stringify({'ref': ref, 'lines': txt}));
+        httpRequest.send(JSON.stringify({'ref': ref, 'lines': txt, 'organ': organ}));
     }
 
     function fileSubmit() {
@@ -266,7 +324,7 @@
         httpRequest.onload = function () {
             if (httpRequest.status === 200) {
                 // OK
-                let el = document.getElementById('next4');
+                let el = document.getElementById('step5');
                 el.style.display = 'none';
                 reportResult(httpRequest.response);
             } else {
@@ -275,6 +333,7 @@
         };
 
         formData.append('ref', ref);
+        formData.append('organ', organ);
         httpRequest.send(formData);
     }
 
