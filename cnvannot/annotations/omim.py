@@ -7,20 +7,36 @@ from cnvannot.common.serialization import *
 # OMIM DB
 
 def omim_morbid_genes_load():
+    ddg2p_dict = {}
     hgnc_dict = {}
-
     chr_dict = {}  # final
 
-    refseq_base_file = 'refGene.txt'
-    refseq_base_path = os.path.join(Common.data_path, refseq_base_file)
+    ddg2p_base_file = 'DDG2P_6_5_2022.csv'
+    ddg2p_base_path = os.path.join(Common.data_path, ddg2p_base_file)
 
     hgnc_base_file = 'hgnc_complete_set_2022-04-01.tsv'
     hgnc_base_path = os.path.join(Common.data_path, hgnc_base_file)
+
+    refseq_base_file = 'refGene.txt'
+    refseq_base_path = os.path.join(Common.data_path, refseq_base_file)
 
     final_base = 'coord2genes'
 
     if serialization_is_serialized(final_base):
         return serialization_deserialize(final_base)
+
+    with open(ddg2p_base_path) as f:
+        for line in f:
+            if line.startswith('gene symbol'):
+                continue
+            parts = line.split(',')
+            omim_id = parts[1]
+            organ_list = parts[8].lower()
+            if omim_id in ddg2p_dict:
+                # Already in list: update.
+                ddg2p_dict[omim_id]['organ_list'] += ';' + organ_list
+            else:
+                ddg2p_dict[omim_id] = {"organ_list": organ_list}
 
     with open(hgnc_base_path) as f:
         for line in f:
@@ -31,7 +47,11 @@ def omim_morbid_genes_load():
             if omim_id == '':
                 continue
             refseq_id = parts[23]
-            hgnc_dict[refseq_id] = {'gene_aliases': parts[1] + '|' + parts[8]}
+            organ_list = ''
+            if omim_id in ddg2p_dict:
+                organ_list = ddg2p_dict[omim_id]['organ_list']
+
+            hgnc_dict[refseq_id] = {'gene_aliases': parts[1] + '|' + parts[8], 'organ_list': organ_list}
 
     with open(refseq_base_path) as f:
         for line in f:
@@ -47,7 +67,8 @@ def omim_morbid_genes_load():
                     chr_dict[chrom] = IntervalTree()
                 try:
                     chr_dict[chrom][start:stop] = {'chr': chrom, 'start': start, 'stop': stop,
-                                                   'omim_gene_aliases': hgnc_dict[refseq_id]['gene_aliases']}
+                                                   'omim_gene_aliases': hgnc_dict[refseq_id]['gene_aliases'],
+                                                   'organ_list': hgnc_dict[refseq_id]['organ_list']}
                 except ValueError:
                     pass
 
