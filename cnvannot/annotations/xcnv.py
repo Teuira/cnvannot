@@ -89,11 +89,13 @@ def xcnv_predict(queries) -> list:
 
 
 def xcnv_interpretation_from_score(score: float) -> str:
-    if score < 0.25:
-        return 'benign'
-    elif score < 0.5:
-        return 'likely benign'
-    elif score < 0.75:
-        return 'likely pathogenic'
-    else:
+    if score >= 0.76:
         return 'pathogenic'
+    elif score >= 0.46:
+        return 'likely pathogenic'
+    elif score >= 0.16:
+        return 'vus'
+    elif score >= 0.14:
+        return 'likely benign'
+    else:
+        return 'benign'
