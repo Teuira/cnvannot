@@ -36,7 +36,7 @@ def xcnv_predict(queries) -> list:
 
     timeout = True
 
-    chr_dict = {}
+    event_chr_dict = {}
 
     # Wait loop.
     for i in range(300):
@@ -56,9 +56,12 @@ def xcnv_predict(queries) -> list:
             for p in prediction_parts[1:-1]:
                 p_parts = p.split('_')
                 chrom = 'chr' + p_parts[0]
-                if chrom not in chr_dict:
-                    chr_dict[chrom] = IntervalTree()
-                chr_dict[chrom][int(p_parts[1]):int(p_parts[2])] = float(p_parts[-1])
+                event_type = p_parts[3]
+                if event_type not in event_chr_dict:
+                    event_chr_dict[event_type] = {}
+                if chrom not in event_chr_dict[event_type]:
+                    event_chr_dict[event_type][chrom] = IntervalTree()
+                event_chr_dict[event_type][chrom][int(p_parts[1]):int(p_parts[2])] = float(p_parts[-1])
 
             break
 
@@ -67,13 +70,20 @@ def xcnv_predict(queries) -> list:
     if timeout:
         raise Exception("Timeout Exception")
 
+    assigned = 0
+
     ret_dict_list = []
     for query in queries:
         ret_dict = base_coordinates_annotation(query)
-        itree: IntervalTree = chr_dict[query.chr]
+        itree: IntervalTree = event_chr_dict[query.type][query.chr]
         for interval in itree[query.start:query.end]:
-            ret_dict["xcnv"] = {'prediction': interval.data}
-        ret_dict_list.append(ret_dict)
+            if interval.begin == query.start and interval.end == query.end:
+                assigned = assigned + 1
+                ret_dict["xcnv"] = {'prediction': interval.data}
+                ret_dict_list.append(ret_dict)
+
+    if assigned != len(queries):
+        raise Exception("Sanity check 2 failed!")
 
     return ret_dict_list
 
