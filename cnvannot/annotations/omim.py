@@ -52,7 +52,7 @@ def omim_morbid_genes_load():
             if omim_id in ddg2p_dict:
                 organ_list = ddg2p_dict[omim_id]['organ_list']
 
-            hgnc_dict[refseq_id] = {'gene_aliases': parts[1] + '|' + parts[8], 'organ_list': organ_list}
+            hgnc_dict[refseq_id] = {'gene_aliases': parts[1] + '|' + parts[8][1:-1], 'organ_list': organ_list}
 
     with open(refseq_base_path) as f:
         for line in f:
