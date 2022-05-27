@@ -27,7 +27,7 @@ def xcnv_predict(queries) -> list:
     for q in queries:
         if q.ref != 'hg19':
             raise Exception('XCNV works only on hg19')
-        xcnv_query += q.chr + ':' + str(q.start) + '-' + str(q.end) + ':' + q.type + ','
+        xcnv_query += q.chr + ':' + str(q.start) + '-' + str(q.end) + ':' + q.type.lower() + ','
     xcnv_query = xcnv_query[:-1]
 
     client = docker.from_env()

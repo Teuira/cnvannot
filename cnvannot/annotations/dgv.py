@@ -18,10 +18,20 @@ def dgv_gold_load():
         for line in f:
             parts = line.split('\t')
             chrom = parts[0]
-            start = int(parts[3])  # TODO: A Verifier
-            stop = int(parts[4])  # TODO: A VERIFIER
+            start = int(-1)
+            stop = int(-1)
             dat = parts[8]
             dat_parts = dat.split(';')
+            for dp in dat_parts:
+                if dp.startswith('outer_start'):
+                    start = int(dp.split('=')[1])
+                if dp.startswith('outer_end'):
+                    stop = int(dp.split('=')[1])
+                    break
+            # Sanity check for start and end
+            if start == -1 or stop == -1:
+                raise Exception('Start and/or stop not assigned!')
+
             var_type = ''
             freq_percent = ''
             for dp in dat_parts:

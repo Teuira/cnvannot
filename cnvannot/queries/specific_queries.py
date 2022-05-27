@@ -9,7 +9,7 @@ def dgv_gold_overlap_count_1_percent(db, query: GenomicCoordinates) -> int:
         if db[query.chr].overlaps(query.start, query.end):
             for r in db[query.chr][query.start:query.end]:
                 t = r.data['var_type']
-                if t != query.type:
+                if t.upper() != query.type.upper():
                     continue
                 if r.data['freq'] >= 1:
                     if overlap_size(r.begin, query.start, r.end, query.end) >= 0.7 * (query.end - query.start):
