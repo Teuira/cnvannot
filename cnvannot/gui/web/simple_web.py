@@ -2,7 +2,7 @@ import gevent
 import json
 from flask import Flask, render_template, jsonify, request
 
-from cnvannot.annotations.dgv import dgv_gold_load
+from cnvannot.annotations.dgv import dgv_full_load, dgv_gold_load
 from cnvannot.annotations.encode import encode_load
 from cnvannot.annotations.omim import omim_morbid_genes_load
 from cnvannot.annotations.refseq import refseq_load
@@ -13,10 +13,11 @@ from cnvannot.common.coordinates import coordinates_from_string
 from cnvannot.queries.basic_queries import *
 from cnvannot.queries.interpretation import interpretation_get
 from cnvannot.queries.specific_queries import dgv_gold_overlap_count_1_percent, exc_overlaps_70_percent, \
-    omim_match_organ
+    omim_match_organ, dgv_gold_fully_included
 
 app = Flask(__name__)
 
+dgv_full_db = dgv_full_load()
 dgv_db = dgv_gold_load()
 refseq_db = refseq_load()
 omim_mg_db = omim_morbid_genes_load()
@@ -87,9 +88,12 @@ def common_batch(ref, lines, organ):
 
         organ_match_count = omim_match_organ(omim_mg_db, queries[i], organ)
 
+        dgv_fully_included_count = dgv_gold_fully_included(dgv_db, queries[i])
+        dgv_full_fully_included_count = dgv_gold_fully_included(dgv_full_db, queries[i])
+
         interpretation_res.append(interpretation_get(queries[i], xcnv_res[i]['xcnv']['prediction'],
                                                      exc_over, g_over, m_over, dgv_over, cn_type, france_inc_pen_db,
-                                                     organ_match_count))
+                                                     organ_match_count, dgv_fully_included_count, dgv_full_fully_included_count))
 
     return jsonify(
         {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
@@ -133,6 +137,8 @@ def search(str_query: str):
     morbid_gene_overlap_count = query_overlap_count(omim_mg_db, query)
     organ_match_count = omim_match_organ(omim_mg_db, query, organ)
     dgv_gold_cnv_overlap_count = dgv_gold_overlap_count_1_percent(dgv_db, query)
+    dgv_fully_included_count = dgv_gold_fully_included(dgv_db, query)
+    dgv_full_fully_included_count = dgv_gold_fully_included(dgv_full_db, query)
 
     xcnv_res = None
     xcnv_res_interpretation = None
@@ -148,7 +154,7 @@ def search(str_query: str):
                                                                                  dgv_gold_cnv_overlap_count,
                                                                                  query.type,
                                                                                  france_inc_pen_db,
-                                                                                 organ_match_count
+                                                                                 organ_match_count,dgv_fully_included_count, dgv_full_fully_included_count
                                                                                  )[0:-68]
 
     return jsonify({'ucsc_url': ucsc_url,

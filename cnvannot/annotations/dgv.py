@@ -5,6 +5,45 @@ from cnvannot.common.serialization import *
 
 # DGV DB
 
+def dgv_full_load():
+    chr_dict = {}
+
+    dgv_base_file = 'GRCh37_hg19_variants_2020-02-25.txt'
+    dgv_base_path = os.path.join(Common.data_path, dgv_base_file)
+
+    if serialization_is_serialized(dgv_base_file):
+        return serialization_deserialize(dgv_base_file)
+
+    with open(dgv_base_path) as f:
+        for line in f:
+            if line.startswith("variantaccession"):
+                continue
+            parts = line.split('\t')
+            chrom = 'chr' + parts[1]
+            start = int(parts[2])
+            stop = int(parts[3])
+            var_type = parts[5].lower()
+
+            if 'gain' in var_type or 'duplication' in var_type:
+                var_type = 'GAIN'
+            elif 'loss' in var_type or 'deletion' in var_type:
+                var_type = 'LOSS'
+
+            if chrom not in chr_dict:
+                # Add new interval tree as value
+                chr_dict[chrom] = IntervalTree()
+
+            try:
+                chr_dict[chrom][start:stop] = {'chr': chrom, 'start': start, 'stop': stop,
+                                               'var_type': var_type}
+            except ValueError:
+                pass
+
+    serialization_serialize(chr_dict, dgv_base_file)
+
+    return chr_dict
+
+
 def dgv_gold_load():
     chr_dict = {}
 
