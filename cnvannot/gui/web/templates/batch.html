@@ -201,7 +201,7 @@
     let organ = '';
 
     window.addEventListener('load', function () {
-        browser_check();
+        checkBrowser();
         document.getElementById('step1').style.display = 'block';
         document.getElementById('step2').style.display = 'none';
         document.getElementById('step3').style.display = 'none';
@@ -211,7 +211,7 @@
         document.getElementById('resDiv').style.display = 'none';
     })
 
-    function browser_check() {
+    function checkBrowser() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
             //alert("Sorry, This page won't work on Firefox. Please consider using another browser!");

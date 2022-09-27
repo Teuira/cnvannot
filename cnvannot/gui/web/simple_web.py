@@ -183,6 +183,8 @@ def search(str_query: str):
                     'morbid_gene_overlap_count': morbid_gene_overlap_count,
                     'morbid_gene_pheno_overlap_count': organ_match_count,
                     'dgv_gold_cnv_overlap_count': dgv_gold_cnv_overlap_count,
+                    'dgv_gold_fully_inc_count': dgv_fully_included_count,
+                    'dgv_fully_inc_count': dgv_full_fully_included_count,
                     'xcnv_res': xcnv_res,
                     'xcnv_res_interpretation': xcnv_res_interpretation,
                     'synth_interpretation': synth_interpretation})

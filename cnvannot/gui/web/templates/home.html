@@ -10,9 +10,9 @@
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" rel="stylesheet">
     <div class="container">
         <br/>
-        <div class="alert alert-warning" role="alert">
+        <!--<div class="alert alert-warning" role="alert">
             Warning: HG38 not Yet implemented!
-        </div>
+        </div>-->
         <br/>
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-10">
@@ -29,10 +29,10 @@
                         </div>
                         <!--end of col-->
                         <div class="col-auto">
-                            <button class="btn btn-lg btn-primary" onclick="start_search()" style="width: 150px">
+                            <button class="btn btn-lg btn-primary" onclick="startSearch()" style="width: 150px">
                                 Search
                             </button>
-                            <button class="btn btn-lg btn-danger" onclick="reset_search()" style="width: 150px">Reset
+                            <button class="btn btn-lg btn-danger" onclick="resetSearch()" style="width: 150px">Reset
                             </button>
                         </div>
                         <!--end of col-->
@@ -90,24 +90,34 @@
 
                             <div id="nav_bar" style="display: none">
                                 <hr>
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="#">Active</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Link</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Link</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link disabled" href="#" tabindex="-1"
-                                           aria-disabled="true">Disabled</a>
-                                    </li>
-                                </ul>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item">
+                                                <a id="overviewTab" class="nav-link active" onclick="showOverview(lastResult)"
+                                                   aria-current="page" href="#">Overview</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a id="dgvTab" class="nav-link" onclick="showDGV(lastResult)" href="#">DGV</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a id="geneTab" class="nav-link" onclick="showGenes(lastResult)" href="#">Genes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a id="aiTab" class="nav-link" onclick="showAI(lastResult)" href="#">AI (X-CNV)</a>
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div id="res_div"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div id="res_div"></div>
+                            <div id="tuto_div"></div>
                         </div>
                         <!--end of col-->
                     </div>
@@ -118,6 +128,26 @@
     </div>
 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <img style="width: 50px; height: 50px" src="../static/images/cnv_hub_loading.svg" alt="">CNV-Hub
+                </h5>
+            </div>
+            <div class="modal-body">
+                The machine interpretation doesn't replace Human interpretation
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 
@@ -126,43 +156,50 @@
 
     const example_query = 'hg19:chr2:1000000-2000000:gain';
 
+    let lastResult = null;
+
     window.addEventListener('load', function () {
-        browser_check();
-        reset_search();
+        checkBrowser();
+        resetSearch();
     })
 
 
-    function browser_check() {
+    function checkBrowser() {
         let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
             //alert("Sorry, This page won't work on Firefox. Please consider using another browser!");
         }
     }
 
-    function show_load() {
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '<img src="../static/images/cnv_hub_loading.svg"><br><h2>Loading...</h2>';
+    function showLoading() {
+        let tuto_div = document.getElementById('tuto_div');
+        tuto_div.innerHTML = '<img src="../static/images/cnv_hub_loading.svg"><br><h2>Loading...</h2>';
     }
 
-    function clear_res_div() {
+    function clearResultDiv() {
         let res_div = document.getElementById('res_div');
         res_div.innerHTML = '';
     }
 
-    function paste_example() {
-        document.getElementById('query_input').value = example_query;
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '<img src="../static/images/tuto_get_started_cnv_hub.gif">'
+    function clearTutorialDiv() {
+        let tuto_div = document.getElementById('tuto_div');
+        tuto_div.innerHTML = '';
     }
 
-    function start_search() {
+    function pasteExample() {
+        document.getElementById('query_input').value = example_query;
+        let tuto_div = document.getElementById('tuto_div');
+        tuto_div.innerHTML = '<img src="../static/images/tuto_get_started_cnv_hub.gif">'
+    }
+
+    function startSearch() {
         let str_query = document.getElementById('query_input').value;
         let str_organ = document.getElementById('organ_input').value;
 
         document.getElementById('igv_div').style.display = "none";
         document.getElementById('nav_bar').style.display = "none";
 
-        show_load();
+        showLoading();
 
         let x = setInterval(function () {
             let httpRequest = new XMLHttpRequest();
@@ -174,8 +211,12 @@
                     let status = httpRequest.status;
                     if (status === 0 || (status >= 200 && status < 400)) {
                         // OK
-                        clear_res_div();
-                        show_res(httpRequest.response);
+                        clearResultDiv();
+                        clearTutorialDiv();
+                        lastResult = httpRequest.response;
+                        showOverview(lastResult);
+                        const myModal = new bootstrap.Modal(document.getElementById('warningModal'), null)
+                        myModal.show();
                     } else {
                         // ERROR
                         alert("Sorry, Something went wrong!");
@@ -190,37 +231,7 @@
         }, 1000);
     }
 
-    function show_res(annotations) {
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC Browser</a>"
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "CNV Length: " + annotations['cnv_len'] + 'bases'
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "CNV Type: " + annotations['cnv_type']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Overlaps with excluded regions: " + annotations['exc_overlaps']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Gene overlaps (any overlap): " + annotations['gene_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "DGV gold overlaps (any overlap > 1% frequency): " + annotations['dgv_gold_cnv_overlap_count']
-
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Interpretation: " + annotations['synth_interpretation']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "*** The machine interpretation doesn't replace Human interpretation"
-
-        /*
-         * IGV: START
-         */
-
+    function showIGV(annotations) {
         let bedFeatures = [{
             "chr": annotations['chr'],
             "start": annotations['start'],
@@ -255,17 +266,83 @@
                 console.log("Created IGV browser");
             })
 
-        /*
-         * SHOW res
-         */
         document.getElementById('igv_div').style.display = "block";
+    }
+
+    function showDGV(annotations) {
+        document.getElementById('dgvTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '';
+
+        res_div.innerHTML += "DGV gold overlaps (70% of query): " + annotations['dgv_gold_cnv_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "DGV gold variant(s) including the full query: " + annotations['dgv_gold_fully_inc_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "DGV variant(s) including the full query: " + annotations['dgv_fully_inc_count']
+    }
+
+    function showGenes(annotations) {
+        document.getElementById('geneTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('dgvTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '<br>';
+
+        res_div.innerHTML += "Gene overlaps (any overlap): " + annotations['gene_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count']
+    }
+
+    function showAI(annotations) {
+        document.getElementById('aiTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('dgvTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '<br>';
+
+        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
+    }
+
+    function showOverview(annotations) {
+        document.getElementById('overviewTab').classList.add("active");
+        document.getElementById('dgvTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '';
+
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "<a href=" + annotations['ucsc_url'] + " target='_blank'>View on UCSC Browser</a>"
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "CNV Length: " + annotations['cnv_len'] + 'bases'
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "CNV Type: " + annotations['cnv_type']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Overlaps with excluded regions: " + annotations['exc_overlaps']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "Interpretation: " + annotations['synth_interpretation']
+        res_div.innerHTML += "<br>"
+
+        showIGV(annotations);
+
         document.getElementById('nav_bar').style.display = "block";
     }
 
-    function reset_search() {
+    function resetSearch() {
         document.getElementById('query_input').value = '';
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '</hr><h3>Example:</h3><br><h4>' + example_query + '  <a href="#" onclick="paste_example()">Try</a></h4>';
+        let tuto_div = document.getElementById('tuto_div');
+        tuto_div.innerHTML = '</hr><h3>Example:</h3><br><h4>' + example_query + '  <a href="#" onclick="pasteExample()">Try</a></h4>';
     }
 </script>
 {% endblock %}
