@@ -1,0 +1,55 @@
+
+	
+	<svg style="width: 200px; height: 200px; enable-background:new 0 0 480 480;" version="1.1" id="all" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 480 480" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#0071BC;}
+	.st1{fill:#662D91;}
+	.st2{fill:#FF0000;}
+</style>
+<circle class="st0" cx="240" cy="243.7" r="67.1"/>
+<g id="c1">
+	<animateTransform
+      attributeName="transform"
+      attributeType="XML"
+      type="rotate"
+      from="0 240 240"
+      to="360 240 240"
+      dur="10s"
+      repeatCount="indefinite" />
+	<path class="st1" d="M79.4,268.5C66.4,185,120,104.4,203.7,85.2s172,33,193.8,118.1l58.3-13.4C426.6,72.6,308.7-0.2,190.3,27
+		C74.3,53.6,0.5,166.5,21.1,282.4C40.4,277.5,59.9,273,79.4,268.5L79.4,268.5z"/>
+	<path class="st2" d="M399.7,213.1c16,83-34.5,164.4-115.7,187.2l13.4,58.3C410.7,428.4,481.3,314.9,458,199.7L399.7,213.1
+		L399.7,213.1z"/>
+</g>
+<g id="c2">
+	<animateTransform
+      attributeName="transform"
+      attributeType="XML"
+      type="rotate"
+      from="360 240 240"
+      to="0 240 240"
+      dur="10s"
+      repeatCount="indefinite" />
+	<path class="st1" d="M349.6,262.2c-9.6,57-61.8,97.7-120.2,92.1c-60.2-5.8-104.5-58.5-100.2-118.5l-40.7-3.9
+		c-6.4,82.4,54.4,155.1,137,163.1c81,7.8,153.3-49.5,165-129.2C376.8,264.8,363.2,263.5,349.6,262.2z"/>
+	<path class="st2" d="M256,92.5l-3.9,40.7c60.4,6.6,104.4,60.5,98.5,121.1c0,0.4-0.1,0.8-0.1,1.2c13.6,1.3,27.1,2.6,40.7,3.6
+		c0-0.3,0.1-0.5,0.1-0.8C399.3,175.1,338.8,101.3,256,92.5L256,92.5z"/>
+</g>
+<g id="c3">
+	<animateTransform
+      attributeName="transform"
+      attributeType="XML"
+      type="rotate"
+      from="0 240 240"
+      to="360 240 240"
+      dur="10s"
+      repeatCount="indefinite" />
+	<path class="st1" d="M285.3,303.4c-31,23.6-75.5,19.5-101.6-10.3s-24.3-77,5.5-104.5L171,167.9c-41.2,37.5-44.9,101.4-8,143.4
+		c36.2,41.3,98.2,46.5,140.7,12.8C297.5,317.3,291.4,310.3,285.3,303.4L285.3,303.4z"/>
+	<path class="st2" d="M192.6,185.6c30.2-24.7,74.3-22,101.3,6l20.7-18.2c-37.1-39.4-98.6-43.2-140.2-8.5L192.6,185.6L192.6,185.6z"
+		/>
+</g>
+</svg>
+
+

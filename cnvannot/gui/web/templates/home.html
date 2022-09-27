@@ -141,7 +141,7 @@
 
     function show_load() {
         let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '<h2>Loading...</h2>';
+        res_div.innerHTML = '<img src="../static/images/cnv_hub_loading.svg"><br><h2>Loading...</h2>';
     }
 
     function clear_res_div() {
@@ -164,26 +164,30 @@
 
         show_load();
 
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.timeout = 120000;
-        httpRequest.responseType = 'json';
-        httpRequest.open('POST', '/search/' + str_query, true);
-        httpRequest.onreadystatechange = function () {
-            if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                let status = httpRequest.status;
-                if (status === 0 || (status >= 200 && status < 400)) {
-                    // OK
-                    clear_res_div();
-                    show_res(httpRequest.response);
-                } else {
-                    // ERROR
-                    alert("Sorry, Something went wrong!");
+        let x = setInterval(function () {
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.timeout = 120000;
+            httpRequest.responseType = 'json';
+            httpRequest.open('POST', '/search/' + str_query, true);
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    let status = httpRequest.status;
+                    if (status === 0 || (status >= 200 && status < 400)) {
+                        // OK
+                        clear_res_div();
+                        show_res(httpRequest.response);
+                    } else {
+                        // ERROR
+                        alert("Sorry, Something went wrong!");
+                    }
                 }
-            }
-        };
-        let formData = new FormData();
-        formData.append('organ', str_organ);
-        httpRequest.send(formData);
+            };
+            let formData = new FormData();
+            formData.append('organ', str_organ);
+            httpRequest.send(formData);
+
+            clearInterval(x);
+        }, 1000);
     }
 
     function show_res(annotations) {
