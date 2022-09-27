@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/igv@2.13.2/dist/igv.min.js"></script>
+
 <div>
 
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
@@ -42,7 +45,7 @@
                                     <button aria-controls="collapseOne" aria-expanded="true" class="accordion-button"
                                             data-bs-target="#collapseOne" data-bs-toggle="collapse"
                                             type="button">
-                                        Options
+                                        Search options
                                     </button>
                                 </h2>
                                 <div aria-labelledby="headingOne" class="accordion-collapse collapse"
@@ -83,6 +86,27 @@
                 <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center" style="flex-direction: column">
                         <div class="col-auto align-content-center">
+                            <div style="display: none" id="igv_div"></div>
+
+                            <div id="nav_bar" style="display: none">
+                                <hr>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">Active</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Link</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Link</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link disabled" href="#" tabindex="-1"
+                                           aria-disabled="true">Disabled</a>
+                                    </li>
+                                </ul>
+                            </div>
+
                             <div id="res_div"></div>
                         </div>
                         <!--end of col-->
@@ -135,6 +159,9 @@
         let str_query = document.getElementById('query_input').value;
         let str_organ = document.getElementById('organ_input').value;
 
+        document.getElementById('igv_div').style.display = "none";
+        document.getElementById('nav_bar').style.display = "none";
+
         show_load();
 
         let httpRequest = new XMLHttpRequest();
@@ -185,6 +212,50 @@
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "<br>"
         res_div.innerHTML += "*** The machine interpretation doesn't replace Human interpretation"
+
+        /*
+         * IGV: START
+         */
+
+        let bedFeatures = [{
+            "chr": annotations['chr'],
+            "start": annotations['start'],
+            "end": annotations['end'],
+            "name": "query"
+        }];
+        let color = "red"
+        if (annotations['cnv_type'] === 'GAIN') {
+            color = "blue";
+        }
+
+        let igvDiv = document.getElementById("igv_div");
+        igvDiv.innerHTML = null;
+        let options =
+            {
+                genome: "hg19",
+                locus: annotations['igv_pos'],
+                tracks: [
+                    {
+                        "name": "Query CNV",
+                        "format": "bed",
+                        "type": "annotation",
+                        "indexed": false,
+                        "features": bedFeatures,
+                        "color": color
+                    }
+                ]
+            };
+
+        igv.createBrowser(igvDiv, options)
+            .then(function (browser) {
+                console.log("Created IGV browser");
+            })
+
+        /*
+         * SHOW res
+         */
+        document.getElementById('igv_div').style.display = "block";
+        document.getElementById('nav_bar').style.display = "block";
     }
 
     function reset_search() {

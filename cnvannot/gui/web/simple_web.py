@@ -93,11 +93,23 @@ def common_batch(ref, lines, organ):
 
         interpretation_res.append(interpretation_get(queries[i], xcnv_res[i]['xcnv']['prediction'],
                                                      exc_over, g_over, m_over, dgv_over, cn_type, france_inc_pen_db,
-                                                     organ_match_count, dgv_fully_included_count, dgv_full_fully_included_count))
+                                                     organ_match_count, dgv_fully_included_count,
+                                                     dgv_full_fully_included_count))
 
-    return jsonify(
+    res = jsonify(
         {'xcnv': xcnv_res, 'ucsc': ucsc_res, 'dgv': dgv_res, 'len': cnv_len_res, 'type': cnv_type_res, 'exc': exc_res,
          'go': gene_overlap_res, 'mo': omim_morbid_overlap_res, 'interpretation': interpretation_res})
+
+    f = open("cnvprocessed.txt", "w")
+    nelem = len(ucsc_res)
+    for i in range(nelem):
+        f.write(ucsc_res[i]['base']['chr'] + "\t" + str(ucsc_res[i]['base']['start']) + "\t" + str(
+            ucsc_res[i]['base']['end'])
+                + "\t" + ucsc_res[i]['base']['chr'] + "\t" + cnv_type_res[i] + "\t"
+                + interpretation_res[i].replace("\n", " ") + "\t" + str(xcnv_res[i]['xcnv']['prediction']) + "\n")
+    f.close()
+
+    return res
 
 
 @app.route("/batch_text", methods=['POST'])
@@ -154,10 +166,16 @@ def search(str_query: str):
                                                                                  dgv_gold_cnv_overlap_count,
                                                                                  query.type,
                                                                                  france_inc_pen_db,
-                                                                                 organ_match_count,dgv_fully_included_count, dgv_full_fully_included_count
+                                                                                 organ_match_count,
+                                                                                 dgv_fully_included_count,
+                                                                                 dgv_full_fully_included_count
                                                                                  )[0:-68]
 
-    return jsonify({'ucsc_url': ucsc_url,
+    return jsonify({'chr': query.chr,
+                    'start': query.start,
+                    'end': query.end,
+                    'igv_pos': query.chr + ":" + str(query.start) + "-" + str(query.end),
+                    'ucsc_url': ucsc_url,
                     'cnv_len': cnv_len,
                     'cnv_type': cnv_type,
                     'exc_overlaps': exclude_overlaps,
