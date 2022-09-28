@@ -147,6 +147,7 @@ def search(str_query: str):
     exclude_overlaps = exc_overlaps_70_percent(encode_db, query)
     gene_overlap_count = query_overlap_count(refseq_db, query)
     morbid_gene_overlap_count = query_overlap_count(omim_mg_db, query)
+    morbid_gene_ivals = query_overlap_get_data(omim_mg_db, query)
     organ_match_count = omim_match_organ(omim_mg_db, query, organ)
     dgv_gold_cnv_overlap_count = dgv_gold_overlap_count_1_percent(dgv_db, query)
     dgv_fully_included_count = dgv_gold_fully_included(dgv_db, query)
@@ -180,6 +181,7 @@ def search(str_query: str):
                     'cnv_type': cnv_type,
                     'exc_overlaps': exclude_overlaps,
                     'gene_overlap_count': gene_overlap_count,
+                    'morbid_genes': morbid_gene_ivals,
                     'morbid_gene_overlap_count': morbid_gene_overlap_count,
                     'morbid_gene_pheno_overlap_count': organ_match_count,
                     'dgv_gold_cnv_overlap_count': dgv_gold_cnv_overlap_count,

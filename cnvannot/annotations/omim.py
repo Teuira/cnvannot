@@ -39,8 +39,10 @@ def omim_morbid_genes_load():
             else:
                 ddg2p_dict[omim_id] = {"organ_list": organ_list}
 
+    i = 0
     with open(hgnc_base_path) as f:
         for line in f:
+            i = i + 1
             if line.startswith('hgnc_id'):
                 continue
             parts = line.split('\t')
@@ -48,11 +50,26 @@ def omim_morbid_genes_load():
             if omim_id == '':
                 continue
             refseq_id = parts[23]
+            if '.' in parts[23]:
+                refseq_id = parts[23].split('.')[0]
             organ_list = ''
             if omim_id in ddg2p_dict:
                 organ_list = ddg2p_dict[omim_id]['organ_list']
 
-            hgnc_dict[refseq_id] = {'gene_aliases': parts[1] + '|' + parts[8][1:-1], 'organ_list': organ_list}
+            data_section = {
+                'gene_name': parts[1],
+                'full_name': parts[2],
+                'gene_aliases': parts[1] + '|' + parts[8][1:-1],
+                'organ_list': organ_list
+            }
+            hgnc_dict[refseq_id] = data_section
+            p52split = parts[52].split('|')
+            for p in p52split:
+                if p.startswith("NM_"):
+                    clean_p = p
+                    if '.' in p:
+                        clean_p = p.split('.')[0]
+                    hgnc_dict[clean_p] = data_section
 
     with open(refseq_base_path) as f:
         for line in f:
@@ -69,7 +86,9 @@ def omim_morbid_genes_load():
                 try:
                     chr_dict[chrom][start:stop] = {'chr': chrom, 'start': start, 'stop': stop,
                                                    'omim_gene_aliases': hgnc_dict[refseq_id]['gene_aliases'],
-                                                   'organ_list': hgnc_dict[refseq_id]['organ_list']}
+                                                   'organ_list': hgnc_dict[refseq_id]['organ_list'],
+                                                   'full_data': hgnc_dict[refseq_id]
+                                                   }
                 except ValueError:
                     pass
 

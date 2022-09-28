@@ -94,17 +94,20 @@
                                     <div class="card-body">
                                         <ul class="nav nav-tabs">
                                             <li class="nav-item">
-                                                <a id="overviewTab" class="nav-link active" onclick="showOverview(lastResult)"
+                                                <a id="overviewTab" class="nav-link active"
+                                                   onclick="showOverview(lastResult)"
                                                    aria-current="page" href="#">Overview</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a id="dgvTab" class="nav-link" onclick="showDGV(lastResult)" href="#">DGV</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a id="geneTab" class="nav-link" onclick="showGenes(lastResult)" href="#">Genes</a>
+                                                <a id="geneTab" class="nav-link" onclick="showGenes(lastResult)"
+                                                   href="#">Genes</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a id="aiTab" class="nav-link" onclick="showAI(lastResult)" href="#">AI (X-CNV)</a>
+                                                <a id="aiTab" class="nav-link" onclick="showAI(lastResult)" href="#">AI
+                                                    (X-CNV)</a>
                                             </li>
                                         </ul>
                                         <hr>
@@ -294,11 +297,25 @@
         let res_div = document.getElementById('res_div');
         res_div.innerHTML = '<br>';
 
-        res_div.innerHTML += "RefGene overlaps (any overlap): " + annotations['gene_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count']
+        res_div.innerHTML += "RefGene overlaps (any overlap): " + annotations['gene_overlap_count'];
+        res_div.innerHTML += "<br>";
+        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count'];
+        res_div.innerHTML += "<br>";
+        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count'];
+        res_div.innerHTML += "<br><hr>OMIM Genes:<br>";
+
+        for (let i = 0; i < annotations['morbid_gene_overlap_count']; i++) {
+            //console.log(JSON.stringify(annotations['morbid_genes'][i]['full_data']));
+            res_div.innerHTML += `<div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">${annotations['morbid_genes'][i]['full_data']['gene_name']}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${annotations['morbid_genes'][i]['full_data']['gene_aliases']}</h6>
+                                <p class="card-text">${annotations['morbid_genes'][i]['full_data']['full_name']}</p>
+                                <!--<a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a>-->
+                              </div>
+                            </div> <br>`;
+        }
     }
 
     function showAI(annotations) {

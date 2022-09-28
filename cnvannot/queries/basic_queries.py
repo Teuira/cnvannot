@@ -25,3 +25,14 @@ def query_overlap_count(db, query: GenomicCoordinates) -> int:
         count = len(itree[query.start:query.end])
 
     return count
+
+
+def query_overlap_get_data(db, query: GenomicCoordinates):
+    if not query_overlaps(db, query):
+        return
+    records = []
+    if query.chr in db:
+        for record in db[query.chr][query.start:query.end]:
+            records.append(record.data)
+
+    return records
