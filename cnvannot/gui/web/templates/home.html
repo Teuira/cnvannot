@@ -310,7 +310,10 @@
         let res_div = document.getElementById('res_div');
         res_div.innerHTML = '<br>';
 
-        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'] + ')'
+        let slider = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg id=\"Calque_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 532 69\"><defs><style>.cls-1{fill:url(#Dégradé_sans_nom_13);}</style><linearGradient id=\"Dégradé_sans_nom_13\" x1=\".5\" y1=\"34.5\" x2=\"531.5\" y2=\"34.5\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" stop-color=\"lime\"/><stop offset=\".16\" stop-color=\"#999\"/><stop offset=\".26\" stop-color=\"#9d9292\"/><stop offset=\".42\" stop-color=\"#aa7e7e\"/><stop offset=\".6\" stop-color=\"#bf5e5e\"/><stop offset=\".8\" stop-color=\"#dd3232\"/><stop offset=\"1\" stop-color=\"red\"/></linearGradient></defs><g><rect class=\"cls-1\" x=\".5\" y=\".5\" width=\"531\" height=\"68\" rx=\"12.01\" ry=\"12.01\"/><path d=\"M519.49,1c6.35,0,11.51,5.17,11.51,11.51V56.49c0,6.35-5.17,11.51-11.51,11.51H12.51c-6.35,0-11.51-5.17-11.51-11.51V12.51C1,6.17,6.17,1,12.51,1h506.97m0-1H12.51C5.6,0,0,5.6,0,12.51V56.49c0,6.91,5.6,12.51,12.51,12.51h506.97c6.91,0,12.51-5.6,12.51-12.51V12.51c0-6.91-5.6-12.51-12.51-12.51h0Z\"/></g><rect x=\"" + (annotations['xcnv_res'] * 532) + "\" y=\"7\" width=\"9\" height=\"55\" rx=\"2.87\" ry=\"2.87\"/></svg>";
+        res_div.innerHTML += slider;
+        res_div.innerHTML += "<br><hr>";
+        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'].trim() + ')'
     }
 
     function showOverview(annotations) {
