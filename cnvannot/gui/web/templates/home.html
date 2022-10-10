@@ -3,6 +3,7 @@
 {% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/igv@2.13.2/dist/igv.min.js"></script>
+<script src="../static/js/doc-retriever.js"></script>
 
 <div>
 
@@ -31,8 +32,6 @@
                         <div class="col-auto">
                             <button class="btn btn-lg btn-primary" onclick="startSearch()" style="width: 150px">
                                 Search
-                            </button>
-                            <button class="btn btn-lg btn-danger" onclick="resetSearch()" style="width: 150px">Reset
                             </button>
                         </div>
                         <!--end of col-->
@@ -109,6 +108,10 @@
                                                 <a id="aiTab" class="nav-link" onclick="showAI(lastResult)" href="#">AI
                                                     (X-CNV)</a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a id="pubTab" class="nav-link" onclick="showPubMed(lastResult)"
+                                                   href="#">PubMed</a>
+                                            </li>
                                         </ul>
                                         <hr>
                                         <div class="card">
@@ -120,7 +123,13 @@
                                 </div>
                             </div>
 
-                            <div id="tuto_div"></div>
+                            <div id="tuto_div">
+                                <h3>Example:</h3>
+                                <br>
+                                <h4>
+                                    hg19:chr2:1000000-2000000:gain <a href="#" onclick="pasteExample()">Try</a>
+                                </h4>
+                            </div>
                         </div>
                         <!--end of col-->
                     </div>
@@ -163,7 +172,16 @@
 
     window.addEventListener('load', function () {
         checkBrowser();
-        resetSearch();
+        /*
+        retrievePublicationsByGene('USH2A', function (xmlDoc) {
+            let pubIds = getPublicationIds(xmlDoc);
+            retrieve10AbstractsFromIds(pubIds, function (res) {
+                console.log("res:");
+                let parser = new DOMParser();
+                console.log(parser.parseFromString(res, "text/xml"));
+            });
+        });
+         */
     })
 
 
@@ -272,72 +290,12 @@
         document.getElementById('igv_div').style.display = "block";
     }
 
-    function showDGV(annotations) {
-        document.getElementById('dgvTab').classList.add("active");
-        document.getElementById('overviewTab').classList.remove("active");
-        document.getElementById('geneTab').classList.remove("active");
-        document.getElementById('aiTab').classList.remove("active");
-
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '';
-
-        res_div.innerHTML += "DGV gold overlaps (70% of query): " + annotations['dgv_gold_cnv_overlap_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "DGV gold variant(s) including the full query: " + annotations['dgv_gold_fully_inc_count']
-        res_div.innerHTML += "<br>"
-        res_div.innerHTML += "DGV variant(s) including the full query: " + annotations['dgv_fully_inc_count']
-    }
-
-    function showGenes(annotations) {
-        document.getElementById('geneTab').classList.add("active");
-        document.getElementById('overviewTab').classList.remove("active");
-        document.getElementById('dgvTab').classList.remove("active");
-        document.getElementById('aiTab').classList.remove("active");
-
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '<br>';
-
-        res_div.innerHTML += "RefGene overlaps (any overlap): " + annotations['gene_overlap_count'];
-        res_div.innerHTML += "<br>";
-        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count'];
-        res_div.innerHTML += "<br>";
-        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count'];
-        res_div.innerHTML += "<br><hr>OMIM Genes:<br>";
-
-        for (let i = 0; i < annotations['morbid_gene_overlap_count']; i++) {
-            //console.log(JSON.stringify(annotations['morbid_genes'][i]['full_data']));
-            res_div.innerHTML += `<div class="card">
-                              <div class="card-body">
-                                <h5 class="card-title">${annotations['morbid_genes'][i]['full_data']['gene_name']}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">${annotations['morbid_genes'][i]['full_data']['gene_aliases']}</h6>
-                                <p class="card-text">${annotations['morbid_genes'][i]['full_data']['full_name']}</p>
-                                <!--<a href="#" class="card-link">Card link</a>
-                                <a href="#" class="card-link">Another link</a>-->
-                              </div>
-                            </div> <br>`;
-        }
-    }
-
-    function showAI(annotations) {
-        document.getElementById('aiTab').classList.add("active");
-        document.getElementById('overviewTab').classList.remove("active");
-        document.getElementById('geneTab').classList.remove("active");
-        document.getElementById('dgvTab').classList.remove("active");
-
-        let res_div = document.getElementById('res_div');
-        res_div.innerHTML = '<br>';
-
-        let slider = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg id=\"Calque_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 532 69\"><defs><style>.cls-1{fill:url(#Dégradé_sans_nom_13);}</style><linearGradient id=\"Dégradé_sans_nom_13\" x1=\".5\" y1=\"34.5\" x2=\"531.5\" y2=\"34.5\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" stop-color=\"lime\"/><stop offset=\".16\" stop-color=\"#999\"/><stop offset=\".26\" stop-color=\"#9d9292\"/><stop offset=\".42\" stop-color=\"#aa7e7e\"/><stop offset=\".6\" stop-color=\"#bf5e5e\"/><stop offset=\".8\" stop-color=\"#dd3232\"/><stop offset=\"1\" stop-color=\"red\"/></linearGradient></defs><g><rect class=\"cls-1\" x=\".5\" y=\".5\" width=\"531\" height=\"68\" rx=\"12.01\" ry=\"12.01\"/><path d=\"M519.49,1c6.35,0,11.51,5.17,11.51,11.51V56.49c0,6.35-5.17,11.51-11.51,11.51H12.51c-6.35,0-11.51-5.17-11.51-11.51V12.51C1,6.17,6.17,1,12.51,1h506.97m0-1H12.51C5.6,0,0,5.6,0,12.51V56.49c0,6.91,5.6,12.51,12.51,12.51h506.97c6.91,0,12.51-5.6,12.51-12.51V12.51c0-6.91-5.6-12.51-12.51-12.51h0Z\"/></g><rect x=\"" + (annotations['xcnv_res'] * 532) + "\" y=\"7\" width=\"9\" height=\"55\" rx=\"2.87\" ry=\"2.87\"/></svg>";
-        res_div.innerHTML += slider;
-        res_div.innerHTML += "<br><hr>";
-        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'].trim() + ')'
-    }
-
     function showOverview(annotations) {
         document.getElementById('overviewTab').classList.add("active");
         document.getElementById('dgvTab').classList.remove("active");
         document.getElementById('geneTab').classList.remove("active");
         document.getElementById('aiTab').classList.remove("active");
+        document.getElementById('pubTab').classList.remove("active");
 
         let res_div = document.getElementById('res_div');
         res_div.innerHTML = '';
@@ -359,11 +317,102 @@
         document.getElementById('nav_bar').style.display = "block";
     }
 
-    function resetSearch() {
-        document.getElementById('query_input').value = '';
-        let tuto_div = document.getElementById('tuto_div');
-        tuto_div.innerHTML = '</hr><h3>Example:</h3><br><h4>' + example_query + '  <a href="#" onclick="pasteExample()">Try</a></h4>';
+    function showDGV(annotations) {
+        document.getElementById('dgvTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+        document.getElementById('pubTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '';
+
+        res_div.innerHTML += "DGV gold overlaps (70% of query): " + annotations['dgv_gold_cnv_overlap_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "DGV gold variant(s) including the full query: " + annotations['dgv_gold_fully_inc_count']
+        res_div.innerHTML += "<br>"
+        res_div.innerHTML += "DGV variant(s) including the full query: " + annotations['dgv_fully_inc_count']
     }
+
+    function showGenes(annotations) {
+        document.getElementById('geneTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('dgvTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+        document.getElementById('pubTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '<br>';
+
+        res_div.innerHTML += "RefGene overlaps (any overlap): " + annotations['gene_overlap_count'];
+        res_div.innerHTML += "<br>";
+        res_div.innerHTML += "Morbid genes overlaps (any overlap): " + annotations['morbid_gene_overlap_count'];
+        res_div.innerHTML += "<br>";
+        res_div.innerHTML += "Morbid genes overlaps (any overlap) corresponding to organ: " + annotations['morbid_gene_pheno_overlap_count'];
+        res_div.innerHTML += "<br><hr>OMIM Genes:<br>";
+
+        for (let i = 0; i < annotations['morbid_gene_overlap_count']; i++) {
+            let geneName = annotations['morbid_genes'][i]['full_data']['gene_name'];
+            res_div.innerHTML += `<div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">${annotations['morbid_genes'][i]['full_data']['gene_name']}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${annotations['morbid_genes'][i]['full_data']['gene_aliases']}</h6>
+                                <p class="card-text">${annotations['morbid_genes'][i]['full_data']['full_name']}</p>
+                                <a href="#" onclick="showPubMed('${geneName}');" class="card-link">PubMed</a>
+                              </div>
+                            </div> <br>`;
+        }
+    }
+
+    function showAI(annotations) {
+        document.getElementById('aiTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('dgvTab').classList.remove("active");
+        document.getElementById('pubTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = '<br>';
+
+        let slider = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg id=\"Calque_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 532 69\"><defs><style>.cls-1{fill:url(#Dégradé_sans_nom_13);}</style><linearGradient id=\"Dégradé_sans_nom_13\" x1=\".5\" y1=\"34.5\" x2=\"531.5\" y2=\"34.5\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" stop-color=\"lime\"/><stop offset=\".16\" stop-color=\"#999\"/><stop offset=\".26\" stop-color=\"#9d9292\"/><stop offset=\".42\" stop-color=\"#aa7e7e\"/><stop offset=\".6\" stop-color=\"#bf5e5e\"/><stop offset=\".8\" stop-color=\"#dd3232\"/><stop offset=\"1\" stop-color=\"red\"/></linearGradient></defs><g><rect class=\"cls-1\" x=\".5\" y=\".5\" width=\"531\" height=\"68\" rx=\"12.01\" ry=\"12.01\"/><path d=\"M519.49,1c6.35,0,11.51,5.17,11.51,11.51V56.49c0,6.35-5.17,11.51-11.51,11.51H12.51c-6.35,0-11.51-5.17-11.51-11.51V12.51C1,6.17,6.17,1,12.51,1h506.97m0-1H12.51C5.6,0,0,5.6,0,12.51V56.49c0,6.91,5.6,12.51,12.51,12.51h506.97c6.91,0,12.51-5.6,12.51-12.51V12.51c0-6.91-5.6-12.51-12.51-12.51h0Z\"/></g><rect x=\"" + (annotations['xcnv_res'] * 532) + "\" y=\"7\" width=\"9\" height=\"55\" rx=\"2.87\" ry=\"2.87\"/></svg>";
+        res_div.innerHTML += slider;
+        res_div.innerHTML += "<br><hr>";
+        res_div.innerHTML += "X-CNV score: " + annotations['xcnv_res'] + ' (' + annotations['xcnv_res_interpretation'].trim() + ')'
+    }
+
+    function showPubMed(gene, startFrom = 0) {
+        document.getElementById('pubTab').classList.add("active");
+        document.getElementById('overviewTab').classList.remove("active");
+        document.getElementById('geneTab').classList.remove("active");
+        document.getElementById('dgvTab').classList.remove("active");
+        document.getElementById('aiTab').classList.remove("active");
+
+        let res_div = document.getElementById('res_div');
+        res_div.innerHTML = `<div class="col"><img style="width: 50px; height: 50px; display: block; margin: 0 auto" src="../static/images/cnv_hub_loading.svg" alt=""></div>`;
+
+        let allRes = [];
+
+        retrievePublicationsByGene(gene, function (xmlDoc) {
+            let pubIds = getPublicationIds(xmlDoc);
+
+            let funcCumulativeRetrieve = function (res) {
+                allRes.push.apply(allRes, res);
+                res_div.innerHTML = `<br>`;
+                for (let i = 0; i < allRes.length; i++) {
+                    let artTitle = allRes[i].getElementsByTagName("ArticleTitle")[0].innerHTML;
+                    res_div.innerHTML += `<div class="card"><div class="card-body">${artTitle}</div></div> <br>`;
+                }
+                //drawMoreButton();
+            };
+
+            let drawMoreButton = function () {
+                res_div.innerHTML += `<div style="display: block; margin: 0 auto" onclick="retrieve10AbstractsFromIds(${pubIds}, funcCumulativeRetrieve)" class="btn btn-primary">Show more</div>`;
+            }
+
+            retrieve10AbstractsFromIds(pubIds, funcCumulativeRetrieve);
+        });
+    }
+
 </script>
 {% endblock %}
 
