@@ -172,6 +172,19 @@ def search(str_query: str):
                                                                                  dgv_full_fully_included_count
                                                                                  )[0:-68]
 
+    synth_interpretation_no_ai = interpretation_get(query,
+                                                    xcnv_res,
+                                                    exclude_overlaps,
+                                                    gene_overlap_count,
+                                                    morbid_gene_overlap_count,
+                                                    dgv_gold_cnv_overlap_count,
+                                                    query.type,
+                                                    france_inc_pen_db,
+                                                    organ_match_count,
+                                                    dgv_fully_included_count,
+                                                    dgv_full_fully_included_count,
+                                                    False)[0:-68]
+
     return jsonify({'chr': query.chr,
                     'start': query.start,
                     'end': query.end,
@@ -189,7 +202,8 @@ def search(str_query: str):
                     'dgv_fully_inc_count': dgv_full_fully_included_count,
                     'xcnv_res': xcnv_res,
                     'xcnv_res_interpretation': xcnv_res_interpretation,
-                    'synth_interpretation': synth_interpretation})
+                    'synth_interpretation': synth_interpretation,
+                    'synth_interpretation_no_ai': synth_interpretation_no_ai})
 
 
 def run_server():
